@@ -43,20 +43,20 @@ instance.interceptors.response.use(
   }
 );
 
-const get = (uri: string, requestConfig = {}) =>
-  instance.get(uri, requestConfig);
+const get = <T = any>(uri: string, requestConfig = {}) =>
+  instance.get<T>(uri, requestConfig);
 
-const post = (uri: string, data: any, requestConfig = {}) =>
-  instance.post(uri, data, requestConfig);
+const post = <T = any>(uri: string, data: any, requestConfig = {}) =>
+  instance.post<T>(uri, data, requestConfig);
 
-const put = (uri: string, data: any, requestConfig = {}) =>
-  instance.put(uri, data, requestConfig);
+const put = <T = any>(uri: string, data: any, requestConfig = {}) =>
+  instance.put<T>(uri, data, requestConfig);
 
-const del = (uri: string, requestConfig = {}) =>
-  instance.delete(uri, requestConfig);
+const del = <T = any>(uri: string, requestConfig = {}) =>
+  instance.delete<T>(uri, requestConfig);
 
-const patch = (uri: string, data: any = {}, requestConfig = {}) =>
-  instance.patch(uri, data, requestConfig);
+const patch = <T = any>(uri: string, data: any = {}, requestConfig = {}) =>
+  instance.patch<T>(uri, data, requestConfig);
 
 export default {
   instance,
