@@ -42,7 +42,7 @@ export const supplierHandlers = [
       return HttpResponse.json({ message: 'Bad Request' }, { status: 400 });
     }
 
-    if (body.role !== 'SUPPLIER' && body.role !== 'CLIENT') {
+    if (body.role !== 'supplier' && body.role !== 'client') {
       return HttpResponse.json({ message: 'Invalid role' }, { status: 400 });
     }
 
