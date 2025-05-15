@@ -7,8 +7,8 @@ export const ClientDashboard = () => {
 
   return (
     <DashboardLayout roleBasedMenuSlot={menu}>
-      <h1 className="text-2xl font-bold">Client Panel</h1>
-      <p className="mb-8">Welcome, client. Here is your dashboard.</p>
+      <h1 className="text-2xl font-bold">Каталог товаров</h1>
+      <p className="mb-8">Выбирайте лучшие товара!</p>
 
       <ClientProductsGrid />
     </DashboardLayout>
