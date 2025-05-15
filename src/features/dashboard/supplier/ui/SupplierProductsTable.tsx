@@ -2,37 +2,148 @@ import { useEffect, useState } from 'react';
 import { type ColumnDef, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { Card } from '@/shared/ui/card';
 import type { SupplierProductDto } from '@/shared/api/dto/supplier';
-import { Button } from '@/shared/ui/button.tsx';
 import api from '@/shared/api/http';
+import { Input } from '@/shared/ui/input';
+import { Button } from '@/shared/ui/button';
 
-const columns: ColumnDef<SupplierProductDto>[] = [
+const columnsConfig = (
+  editRowId: number | null,
+  editedRow: Partial<SupplierProductDto> | null,
+  onEdit: (row: SupplierProductDto) => void,
+  onCancel: () => void,
+  onSave: (id: number) => void,
+  onChangeField: (field: keyof SupplierProductDto, value: string | number) => void
+): ColumnDef<SupplierProductDto>[] => [
   { accessorKey: 'id', header: 'ID' },
-  { accessorKey: 'title', header: 'Название товара' },
-  { accessorKey: 'quantity', header: 'Количество' },
-  { accessorKey: 'sellingPrice', header: 'Себестоимость ₽' },
-  { accessorKey: 'price', header: 'Цена продажи ₽' },
-  { accessorKey: 'previewImageId', header: 'Превью', cell: ({ getValue }) => <span>{getValue() ? `ID: ${getValue()}` : '—'}</span> },
-  { id: 'actions', header: 'Действия', cell: () => <Button variant="ghost" className="px-2 py-1 rounded">✏️</Button> },
+  {
+    accessorKey: 'title',
+    header: 'Название товара',
+    cell: ({ row }) =>
+      editRowId === row.original.id ? (
+        <Input
+          value={editedRow?.title ?? ''}
+          onChange={(e) => onChangeField('title', e.target.value)}
+        />
+      ) : (
+        row.original.title
+      ),
+  },
+  {
+    accessorKey: 'quantity',
+    header: 'Количество',
+    cell: ({ row }) =>
+      editRowId === row.original.id ? (
+        <Input
+          type="number"
+          value={editedRow?.quantity ?? ''}
+          onChange={(e) => onChangeField('quantity', Number(e.target.value))}
+        />
+      ) : (
+        row.original.quantity
+      ),
+  },
+  {
+    accessorKey: 'sellingPrice',
+    header: 'Себестоимость ₽',
+    cell: ({ row }) =>
+      editRowId === row.original.id ? (
+        <Input
+          type="number"
+          value={editedRow?.sellingPrice ?? ''}
+          onChange={(e) => onChangeField('sellingPrice', Number(e.target.value))}
+        />
+      ) : (
+        row.original.sellingPrice
+      ),
+  },
+  {
+    accessorKey: 'price',
+    header: 'Цена продажи ₽',
+    cell: ({ row }) =>
+      editRowId === row.original.id ? (
+        <Input
+          type="number"
+          value={editedRow?.price ?? ''}
+          onChange={(e) => onChangeField('price', Number(e.target.value))}
+        />
+      ) : (
+        row.original.price
+      ),
+  },
+  {
+    accessorKey: 'previewImageId',
+    header: 'Превью',
+    cell: ({ row }) =>
+      editRowId === row.original.id ? (
+        <Input
+          type="number"
+          value={editedRow?.previewImageId ?? ''}
+          onChange={(e) => onChangeField('previewImageId', Number(e.target.value))}
+        />
+      ) : row.original.previewImageId ? (
+        `ID: ${row.original.previewImageId}`
+      ) : (
+        '—'
+      ),
+  },
+  {
+    id: 'actions',
+    header: 'Действия',
+    cell: ({ row }) =>
+      editRowId === row.original.id ? (
+        <>
+          <Button variant="ghost" size="sm" onClick={() => onSave(row.original.id)}>
+            ✅
+          </Button>
+          <Button variant="ghost" size="sm" onClick={onCancel} className="ml-2">
+            ❌
+          </Button>
+        </>
+      ) : (
+        <Button variant="ghost" size="sm" onClick={() => onEdit(row.original)}>
+          ✏️
+        </Button>
+      ),
+  },
 ];
 
 export const SupplierProductsTable = () => {
   const [data, setData] = useState<SupplierProductDto[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [editRowId, setEditRowId] = useState<number | null>(null);
+  const [editedRow, setEditedRow] = useState<Partial<SupplierProductDto> | null>(null);
 
   useEffect(() => {
-    api.get<SupplierProductDto[]>('/supplier/my/products')
-      .then((res) => setData(res.data))
-      .catch(() => setData([]))
-      .finally(() => setLoading(false));
+    api.get<SupplierProductDto[]>('supplier/my/products').then((res) => {
+      setData(res.data);
+    });
   }, []);
+
+  const handleEdit = (row: SupplierProductDto) => {
+    setEditRowId(row.id);
+    setEditedRow({ ...row });
+  };
+
+  const handleCancel = () => {
+    setEditRowId(null);
+    setEditedRow(null);
+  };
+
+  const handleChangeField = (field: keyof SupplierProductDto, value: string | number) => {
+    setEditedRow((prev) => ({ ...prev!, [field]: value }));
+  };
+
+  const handleSave = (id: number) => {
+    if (!editedRow) return;
+    setData((prev) => prev.map((item) => (item.id === id ? { ...item, ...editedRow } : item)));
+    // можно отправить PUT на API тут
+    handleCancel();
+  };
 
   const table = useReactTable({
     data,
-    columns,
+    columns: columnsConfig(editRowId, editedRow, handleEdit, handleCancel, handleSave, handleChangeField),
     getCoreRowModel: getCoreRowModel(),
   });
-
-  if (loading) return <div className="text-center p-4">Загрузка...</div>;
 
   return (
     <Card className="p-4">
