@@ -9,8 +9,8 @@ const mockProducts: ProductDtoResponse[] = [
 
 // Моки продуктов для главного каталога
 const mockMainProducts: MainDtoResponse[] = [
-  { id: 1, title: 'Товар A', price: 150, quantity: 10, imageUrl: '/mock/image1.jpg' },
-  { id: 2, title: 'Товар B', price: 250, quantity: 20, imageUrl: '/mock/image2.jpg' },
+  { id: 1, title: 'Товар A', price: 150, quantity: 10, imageUrl: '/vite.svg' },
+  { id: 2, title: 'Товар B', price: 250, quantity: 20, imageUrl: '/vite.svg' },
 ];
 
 // Обработчик MSW
@@ -43,6 +43,18 @@ export const productHandlers = [
     const formData = await request.formData();
     const title = formData.get('title');
     return HttpResponse.json({ message: `Продукт ${title} успешно создан!` }, { status: 201 });
+  }),
+
+  // Обновить продукт (возвращает сообщение)
+  http.put('/api/v1/product/update/:id', async ({ params, request }) => {
+    const { id } = params;
+    const updated = await request.json() as Partial<ProductDtoResponse>;
+    const index = mockProducts.findIndex((p) => p.id === Number(id));
+    if (index === -1) {
+      return new HttpResponse('Товар не найден', { status: 404 });
+    }
+    mockProducts[index] = { ...mockProducts[index], ...updated };
+    return HttpResponse.json({ message: `Товар ${id} успешно обновлен!` });
   }),
 
   // Удалить продукт

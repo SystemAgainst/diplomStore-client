@@ -4,7 +4,7 @@ export const menuConfig = {
     { label: 'Мои продукты', path: '/supplier/products' },
   ],
   client: [
-    { label: 'Каталог', path: '/client/catalog' },
+    { label: 'Каталог', path: 'client/me' },
     { label: 'Мои заказы', path: '/client/orders' },
   ],
   admin: [
