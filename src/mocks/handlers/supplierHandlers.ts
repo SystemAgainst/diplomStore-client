@@ -1,5 +1,6 @@
 import { http, HttpResponse } from 'msw';
-import type { RegisterSupplierDtoRequest } from '@/shared/api/dto/supplier.ts';
+import type { RegisterSupplierDtoRequest, SupplierProductDto } from '@/shared/api/dto/supplier';
+
 
 export const supplierHandlers = [
   http.get('/api/v1/supplier/me', () => {
@@ -13,10 +14,11 @@ export const supplierHandlers = [
   }),
 
   http.get('/api/v1/supplier/my/products', () => {
-    return HttpResponse.json([
-      { id: 1, name: 'Product A', price: 100 },
-      { id: 2, name: 'Product B', price: 200 },
-    ]);
+    const products: SupplierProductDto[] = [
+      { id: 1, title: 'Product A', quantity: 50, sellingPrice: 100, price: 150, previewImageId: 123 },
+      { id: 2, title: 'Product B', quantity: 20, sellingPrice: 200, price: 300, previewImageId: null },
+    ];
+    return HttpResponse.json(products);
   }),
 
   http.get('/api/v1/supplier/my/orders', () => {
@@ -36,7 +38,6 @@ export const supplierHandlers = [
   http.post('/api/v1/supplier/register', async ({ request }) => {
     const body = (await request.json()) as RegisterSupplierDtoRequest;
     console.log('REGISTER MOCK:', body);
-
 
     if (!body.login || !body.password || !body.email) {
       return HttpResponse.json({ message: 'Bad Request' }, { status: 400 });

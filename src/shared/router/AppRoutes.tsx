@@ -5,6 +5,7 @@ import { SupplierDashboard } from '@/features/dashboard/supplier/SupplierDashboa
 import { AdminDashboard } from '@/features/dashboard/AdminDashboard';
 import { useAuthStore } from '@/features/auth/useAuthStore';
 import { RegisterPage } from '@/features/auth/RegisterPage';
+import { SupplierProductsPage } from '@/features/dashboard/supplier/pages/SupplierProductsPage.tsx';
 
 
 export const AppRoutes = () => {
@@ -22,10 +23,17 @@ export const AppRoutes = () => {
 
     return (
       <Routes>
-          <Route path="/client" element={<ClientDashboard />} />
-          <Route path="/supplier" element={<SupplierDashboard />} />
-          <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="*" element={<Navigate to={`/${role}`} replace />} />
+        {/*SUPPLIER*/}
+        <Route path="/supplier/me" element={<SupplierDashboard />} />
+        <Route path="/supplier/products" element={<SupplierProductsPage />} />
+
+        {/*CLIENT*/}
+        <Route path="/client/me" element={<ClientDashboard />} />
+
+        {/*ADMIN*/}
+        <Route path="/admin/me" element={<AdminDashboard />} />
+
+        <Route path="*" element={<Navigate to={`/${role}/me`} replace />} />
       </Routes>
     );
 };

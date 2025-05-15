@@ -8,11 +8,15 @@ export interface SupplierDto {
   telegram: string;
 }
 
-export interface ProductDto {
+export interface SupplierProductDto {
   id: number;
-  name: string;
+  title: string;
+  quantity: number;
+  sellingPrice: number;
   price: number;
+  previewImageId: number | null;
 }
+
 
 export interface OrderSupplierDto {
   id: number;
