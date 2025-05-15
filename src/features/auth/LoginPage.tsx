@@ -7,8 +7,8 @@ import { authUser } from '@/shared/api/user.ts';
 
 
 export const LoginPage = () => {
-  const [login, setLogin] = useState('supplier0');
-  const [password, setPassword] = useState('222222');
+  const [login, setLogin] = useState('client0');
+  const [password, setPassword] = useState('111111');
   const [error, setError] = useState('');
   const setAuth = useAuthStore((s) => s.login);
   const navigate = useNavigate();

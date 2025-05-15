@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { LoginPage } from '@/features/auth/LoginPage';
-import { ClientDashboard } from '@/features/dashboard/ClientDashboard';
+import { ClientDashboard } from '@/features/dashboard/client/ClientDashboard.tsx';
 import { SupplierDashboard } from '@/features/dashboard/supplier/SupplierDashboard.tsx';
 import { AdminDashboard } from '@/features/dashboard/AdminDashboard';
 import { useAuthStore } from '@/features/auth/useAuthStore';
