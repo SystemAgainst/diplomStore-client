@@ -1,3 +1,5 @@
+import type { Role } from '@/shared/const';
+
 export interface UserInfoDtoResponse {
   id: number;
   login: string;
@@ -7,7 +9,7 @@ export interface UserInfoDtoResponse {
 
 export interface AuthResponse {
   login: string;
-  role: string;
+  role: Role;
   token: string;
 }
 
