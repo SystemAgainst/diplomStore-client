@@ -1,6 +1,6 @@
-import { DashboardLayout } from '../DashboardLayout.tsx';
-import { useRoleMenu } from '@/shared/hooks/useRoleMenu.tsx';
-import { ClientProductsGrid } from '@/features/dashboard/client/ui/ClientProductsGrid.tsx';
+import { DashboardLayout } from '../DashboardLayout';
+import { useRoleMenu } from '@/shared/hooks/useRoleMenu';
+import { ClientProductsGrid } from '@/features/dashboard/client/ui/ClientProductsGrid';
 
 export const ClientDashboard = () => {
   const menu = useRoleMenu();

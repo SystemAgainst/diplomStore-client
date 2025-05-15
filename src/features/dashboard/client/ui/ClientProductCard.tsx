@@ -1,23 +1,72 @@
-import type { MainDtoResponse } from '@/shared/api/dto/product';
 import { Card } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
+import type { MainDtoResponse, ProductInfoMainDtoResponse } from '@/shared/api/dto/product';
+import { Dialog, DialogContent, DialogTrigger } from '@/shared/ui/dialog';
+import { useState } from 'react';
+import api from '@/shared/api/http';
 
 interface ClientProductCardProps {
   product: MainDtoResponse;
 }
 
 export const ClientProductCard = ({ product }: ClientProductCardProps) => {
+  const [details, setDetails] = useState<ProductInfoMainDtoResponse | null>(null);
+  const [open, setOpen] = useState(false);
+
+  const fetchDetails = async () => {
+    try {
+      const res = await api.get<ProductInfoMainDtoResponse>(`/product/${product.id}`);
+      setDetails(res.data);
+    } catch (error) {
+      console.error('Ошибка получения деталей продукта:', error);
+    }
+  };
+
+  const handleOpenChange = (isOpen: boolean) => {
+    setOpen(isOpen);
+    if (isOpen && !details) {
+      fetchDetails();
+    }
+  };
+
   return (
-    <Card className="p-4 flex flex-col">
-      <img
-        src={product.imageUrl || '/placeholder.jpg'}
-        alt={product.title}
-        className="h-48 object-cover rounded mb-4"
-      />
-      <h3 className="text-lg font-bold">{product.title}</h3>
-      <div className="text-sm text-gray-500">Осталось: {product.quantity} шт.</div>
-      <div className="text-xl font-bold mt-2">{product.price} ₽</div>
-      <Button className="mt-auto">Подробнее</Button>
-    </Card>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
+      <Card className="p-4 flex flex-col gap-4">
+        <img
+          src={product.imageUrl}
+          alt={product.title}
+          className="h-48 w-full object-cover rounded"
+          onError={(e) => ((e.target as HTMLImageElement).src = '/placeholder.jpg')}
+        />
+        <div>
+          <h3 className="font-bold text-lg">{product.title}</h3>
+          <p className="text-sm text-gray-500">Осталось: {product.quantity} шт.</p>
+          <p className="text-xl font-semibold">{product.price} ₽</p>
+        </div>
+        <DialogTrigger asChild>
+          <Button className="w-full">Подробнее</Button>
+        </DialogTrigger>
+      </Card>
+
+      <DialogContent className="max-w-md mx-auto">
+        {details ? (
+          <div className="space-y-4">
+            <img
+              src={product.imageUrl || '/vite.svg'}
+              alt={details.title}
+              className="w-full h-64 object-cover rounded"
+              onError={(e) => ((e.target as HTMLImageElement).src = '/vite.svg')}
+            />
+            <h2 className="text-2xl font-bold">{details.title}</h2>
+            <p><strong>Цена:</strong> {details.price} ₽</p>
+            <p><strong>Остаток на складе:</strong> {details.quantity} шт.</p>
+            <p><strong>Продавец:</strong> {details.supplierLogin}</p>
+            <Button className="w-full">Добавить в корзину</Button>
+          </div>
+        ) : (
+          <p>Загрузка...</p>
+        )}
+      </DialogContent>
+    </Dialog>
   );
 };

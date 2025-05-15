@@ -7,6 +7,7 @@ import { useAuthStore } from '@/features/auth/useAuthStore';
 import { RegisterPage } from '@/features/auth/RegisterPage';
 import { SupplierProductsPage } from '@/features/dashboard/supplier/pages/SupplierProductsPage.tsx';
 import { SupplierOrdersPage } from '@/features/dashboard/supplier/pages/SupplierOrdersPage.tsx';
+import { ClientCart } from '@/features/dashboard/client/ui/ClientCart.tsx';
 
 
 export const AppRoutes = () => {
@@ -31,6 +32,7 @@ export const AppRoutes = () => {
 
         {/*CLIENT*/}
         <Route path="/client/me" element={<ClientDashboard />} />
+        <Route path="/client/cart" element={<ClientCart />} />
 
         {/*ADMIN*/}
         <Route path="/admin/me" element={<AdminDashboard />} />
