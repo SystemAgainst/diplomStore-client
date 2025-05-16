@@ -17,7 +17,6 @@ export interface SupplierProductDto {
   previewImageId: number | null;
 }
 
-
 export interface OrderSupplierDto {
   id: number;
   status: string;

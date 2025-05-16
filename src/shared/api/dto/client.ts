@@ -1,6 +1,5 @@
 import type { Role } from '@/shared/const';
 
-
 export interface RegisterClientDtoRequest {
   login: string;
   password: string;

@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import type { RegisterSupplierDtoRequest } from '@/shared/api/dto/supplier';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select.tsx';
 import { type Role, ROLES } from '@/shared/const';
+import { registerSupplier } from '@/shared/api/user.ts';
+import { useAuthStore } from '@/features/auth/useAuthStore.ts';
 
 export const RegisterPage = () => {
   const [form, setForm] = useState<RegisterSupplierDtoRequest>({
@@ -19,6 +21,7 @@ export const RegisterPage = () => {
   });
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const loginStore = useAuthStore((s) => s.login);
 
   const handleChange = (field: keyof RegisterSupplierDtoRequest) => (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [field]: e.target.value });
@@ -32,7 +35,10 @@ export const RegisterPage = () => {
     e.preventDefault();
     setError('');
     try {
-      navigate('/auth');
+      const res = await registerSupplier(form);
+      console.log(":: ", res);
+      loginStore(res.data.login, form.role);
+      navigate(`/${form.role}`, { replace: true });
     } catch (err) {
       setError('Ошибка регистрации. Проверьте введённые данные.');
     }
@@ -48,8 +54,8 @@ export const RegisterPage = () => {
               <SelectValue placeholder="Выберите роль" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="SUPPLIER">Поставщик</SelectItem>
-              <SelectItem value="CLIENT">Клиент</SelectItem>
+              <SelectItem value="supplier">Поставщик</SelectItem>
+              <SelectItem value="client">Клиент</SelectItem>
             </SelectContent>
           </Select>
         </div>
