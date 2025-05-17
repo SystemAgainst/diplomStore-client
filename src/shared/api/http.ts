@@ -1,9 +1,10 @@
 import axios from 'axios';
 
-const CONFIG = 'http://localhost:5173';
+const BASE_URL = import.meta.env.VITE_API_URL || '/api/v1';
+const IS_MSW_ENABLED = import.meta.env.VITE_ENABLE_MSW === 'true';
 
 const instance = axios.create({
-  baseURL: `${CONFIG}/api/v1`,
+  baseURL: BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -20,6 +21,13 @@ instance.interceptors.request.use((requestConfig) => {
   if (token) {
     requestConfig.headers.Authorization = `Bearer ${token}`;
   }
+
+  console.info(
+    `%c[${IS_MSW_ENABLED ? 'MOCK' : 'REAL'}] ${requestConfig.method?.toUpperCase()} ${requestConfig.url}`,
+    `color: ${IS_MSW_ENABLED ? 'orange' : 'green'}; font-weight: bold;`,
+    requestConfig.data || ''
+  );
+
   return requestConfig;
 });
 

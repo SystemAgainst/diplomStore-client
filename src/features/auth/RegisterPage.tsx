@@ -19,6 +19,7 @@ export const RegisterPage = () => {
     phoneNumber: '88005553535',
     role: ROLES.SUPPLIER,
   });
+
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const loginStore = useAuthStore((s) => s.login);
@@ -36,7 +37,6 @@ export const RegisterPage = () => {
     setError('');
     try {
       const res = await registerSupplier(form);
-      console.log(":: ", res);
       loginStore(res.data.login, form.role);
       navigate(`/${form.role}`, { replace: true });
     } catch (err) {
@@ -54,8 +54,8 @@ export const RegisterPage = () => {
               <SelectValue placeholder="Выберите роль" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="supplier">Поставщик</SelectItem>
-              <SelectItem value="client">Клиент</SelectItem>
+              <SelectItem value="SUPPLIER">Поставщик</SelectItem>
+              <SelectItem value="CLIENT">Клиент</SelectItem>
             </SelectContent>
           </Select>
         </div>

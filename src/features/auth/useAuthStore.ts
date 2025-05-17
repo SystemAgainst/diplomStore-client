@@ -1,10 +1,9 @@
 import { create } from 'zustand';
-
-type Role = 'client' | 'supplier' | 'admin' | null;
+import type { Role } from '@/shared/const';
 
 interface AuthState {
   user: string | null;
-  role: Role;
+  role: Role | null;
   login: (user: string, role: Role) => void;
   logout: () => void;
 }

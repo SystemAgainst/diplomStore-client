@@ -1,5 +1,6 @@
 import { http, HttpResponse } from 'msw';
 import type { RegisterSupplierDtoRequest, SupplierProductDto } from '@/shared/api/dto/supplier';
+import { ROLES } from '@/shared/const';
 
 
 export const supplierHandlers = [
@@ -43,7 +44,7 @@ export const supplierHandlers = [
       return HttpResponse.json({ message: 'Bad Request' }, { status: 400 });
     }
 
-    if (body.role !== 'supplier' && body.role !== 'client') {
+    if (body.role !== ROLES.SUPPLIER && body.role !== ROLES.CLIENT) {
       return HttpResponse.json({ message: 'Invalid role' }, { status: 400 });
     }
 
