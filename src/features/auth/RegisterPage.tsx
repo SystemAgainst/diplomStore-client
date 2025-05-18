@@ -11,26 +11,30 @@ import {
   SelectValue,
 } from '@/shared/ui/select.tsx';
 import { type Role, ROLES } from '@/shared/const';
-import { registerSupplier } from '@/shared/api/user.ts';
+import { registerClient, registerSupplier } from '@/shared/api/user.ts';
 import { toast } from 'sonner';
+import type { RegisterClientDtoRequest } from '@/shared/api/dto/client.ts';
 
+
+type FormType = (RegisterSupplierDtoRequest & Partial<Pick<RegisterClientDtoRequest, 'inn' | 'ogrnip'>>);
 
 export const RegisterPage = () => {
-  const [form, setForm] = useState<RegisterSupplierDtoRequest>({
-    login: 'c1',
-    password: 'root0000',
-    loginTelegram: 'telegram_c1',
-    chatId: '23453249',
-    fio: 'Никита Ким',
-    email: 'c1@mail.ru',
-    phoneNumber: '+79991234569',
+  const [form, setForm] = useState<FormType>({
+    login: '',
+    password: '',
+    loginTelegram: '',
+    chatId: '',
+    fio: '',
+    email: '',
+    phoneNumber: '',
     role: ROLES.SUPPLIER,
+    inn: '',
+    ogrnip: '',
   });
-
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleChange = (field: keyof RegisterSupplierDtoRequest) => (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (field: keyof FormType) => (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [field]: e.target.value });
   };
 
@@ -42,7 +46,22 @@ export const RegisterPage = () => {
     e.preventDefault();
     setError('');
     try {
-      await registerSupplier(form);
+      switch (form.role) {
+        case ROLES.CLIENT: {
+          const clientForm = form as RegisterClientDtoRequest;
+          await registerClient(clientForm);
+          break;
+        }
+
+        case ROLES.SUPPLIER: {
+          const supplierForm = form as RegisterSupplierDtoRequest;
+          await registerSupplier(supplierForm);
+          break;
+        }
+
+        default:
+          throw new Error(`Неизвестная роль: ${form.role}`);
+      }
 
       toast('Вы зарегистрированы!', {
         description: 'Теперь вы можете войти в систему.',
@@ -79,6 +98,13 @@ export const RegisterPage = () => {
         <Input placeholder="ФИО" value={form.fio} onChange={handleChange('fio')} required />
         <Input placeholder="Email" value={form.email} onChange={handleChange('email')} type="email" required />
         <Input placeholder="Телефон" value={form.phoneNumber} onChange={handleChange('phoneNumber')} required />
+
+        {form.role === ROLES.CLIENT && (
+          <>
+            <Input placeholder="ИНН" value={form.inn} onChange={handleChange('inn')} required />
+            <Input placeholder="ОГРНИП" value={form.ogrnip} onChange={handleChange('ogrnip')} required />
+          </>
+        )}
 
         <Button className="w-full" type="submit">
           Зарегистрироваться

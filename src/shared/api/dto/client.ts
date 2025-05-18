@@ -2,11 +2,13 @@ import type { Role } from '@/shared/const';
 
 export interface RegisterClientDtoRequest {
   login: string;
-  password: string;
   loginTelegram: string;
+  inn?: string;
   chatId: string;
-  fio: string;
+  ogrnip?: string;
   email: string;
   phoneNumber: string;
+  fio: string;
+  password: string;
   role: Role;
 }
