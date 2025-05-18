@@ -6,3 +6,9 @@ export const createProduct = (data: FormData) =>
       'Content-Type': 'multipart/form-data',
     },
   });
+
+export const getAllProducts = () =>
+  api.get('product');
+
+export const getProductById = (id: number) =>
+  api.get(`product/${id}`);

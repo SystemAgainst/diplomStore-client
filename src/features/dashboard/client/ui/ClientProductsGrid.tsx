@@ -1,16 +1,24 @@
 import { useEffect, useState } from 'react';
-import api from '@/shared/api/http';
 import type { MainDtoResponse } from '@/shared/api/dto/product';
 import { ClientProductCard } from './ClientProductCard';
+import { getAllProducts } from '@/shared/api/product.ts';
 
 export const ClientProductsGrid = () => {
   const [products, setProducts] = useState<MainDtoResponse[]>([]);
 
-  useEffect(() => {
-    api.get<MainDtoResponse[]>('/product').then((res) => {
-      console.log('response', res.data);
+  const fetchAllProducts = async () => {
+    try {
+      const res = await getAllProducts();
+      console.log("all products", res.data);
+
       setProducts(res.data);
-    });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllProducts();
   }, []);
 
   return (

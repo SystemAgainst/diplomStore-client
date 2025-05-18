@@ -5,12 +5,12 @@ export const menuConfig = {
     { label: 'Мои заказы', path: '/SUPPLIER/orders' },
   ],
   "SOLE_TRADER": [
-    { label: 'Главная', path: 'client/me' },
-    { label: 'Мои заказы', path: '/client/order' },
-    { label: 'Моя корзина', path: '/client/cart' },
+    { label: 'Главная', path: 'SOLE_TRADER/me' },
+    { label: 'Статус заказа', path: '/SOLE_TRADER/order' },
+    { label: 'Моя корзина', path: '/SOLE_TRADER/cart' },
   ],
   "ADMIN": [
-    { label: 'Панель администратора', path: '/admin' },
+    { label: 'Панель администратора', path: '/ADMIN/me' },
     { label: 'Пользователи', path: '/admin/users' },
   ],
 } as const;

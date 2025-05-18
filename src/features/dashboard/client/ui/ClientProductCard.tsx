@@ -3,7 +3,7 @@ import { Button } from '@/shared/ui/button';
 import type { MainDtoResponse, ProductInfoMainDtoResponse } from '@/shared/api/dto/product';
 import { Dialog, DialogContent, DialogTrigger } from '@/shared/ui/dialog';
 import { useState } from 'react';
-import api from '@/shared/api/http';
+import { getProductById } from '@/shared/api/product.ts';
 
 interface ClientProductCardProps {
   product: MainDtoResponse;
@@ -15,7 +15,7 @@ export const ClientProductCard = ({ product }: ClientProductCardProps) => {
 
   const fetchDetails = async () => {
     try {
-      const res = await api.get<ProductInfoMainDtoResponse>(`/product/${product.id}`);
+      const res = await getProductById(product.id);
       setDetails(res.data);
     } catch (error) {
       console.error('Ошибка получения деталей продукта:', error);
@@ -36,7 +36,7 @@ export const ClientProductCard = ({ product }: ClientProductCardProps) => {
           src={product.imageUrl}
           alt={product.title}
           className="h-48 w-full object-cover rounded"
-          onError={(e) => ((e.target as HTMLImageElement).src = '/placeholder.jpg')}
+          onError={(e) => ((e.target as HTMLImageElement).src = '/mock-product.jpg')}
         />
         <div>
           <h3 className="font-bold text-lg">{product.title}</h3>
@@ -52,10 +52,10 @@ export const ClientProductCard = ({ product }: ClientProductCardProps) => {
         {details ? (
           <div className="space-y-4">
             <img
-              src={product.imageUrl || '/vite.svg'}
+              src={product.imageUrl || '/mock-product.jpg'}
               alt={details.title}
               className="w-full h-64 object-cover rounded"
-              onError={(e) => ((e.target as HTMLImageElement).src = '/vite.svg')}
+              onError={(e) => ((e.target as HTMLImageElement).src = '/mock-product.jpg')}
             />
             <h2 className="text-2xl font-bold">{details.title}</h2>
             <p><strong>Цена:</strong> {details.price} ₽</p>
