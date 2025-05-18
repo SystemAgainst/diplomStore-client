@@ -1,4 +1,8 @@
 import api from './http';
 
-// лучше product/all
-export const getProductsList = () => api.get('product');
+export const createProduct = (data: FormData) =>
+  api.post('product/create', data, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });

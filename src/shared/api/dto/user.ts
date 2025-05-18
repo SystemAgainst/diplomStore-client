@@ -1,16 +1,23 @@
 import type { Role } from '@/shared/const';
 
-export interface UserInfoDtoResponse {
+
+export interface User {
   id: number;
   login: string;
   loginTelegram: string;
+  inn?: string;
   chatId: string;
+  ogrnip?: string;
+  email: string;
+  phoneNumber: string;
+  fio: string;
+  password: string;
+  role: Role;
 }
 
 export interface AuthResponse {
-  login: string;
-  role: Role;
   token: string;
+  user: User;
 }
 
 export interface AuthRequest {

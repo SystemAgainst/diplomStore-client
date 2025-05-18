@@ -34,8 +34,6 @@ export interface RegisterSupplierDtoRequest {
   login: string;
   password: string;
   loginTelegram: string;
-  inn?: string;
-  ogrnip?: string;
   chatId: string;
   fio: string;
   email: string;

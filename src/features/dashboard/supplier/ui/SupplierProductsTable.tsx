@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { type ColumnDef, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { Card } from '@/shared/ui/card';
 import type { SupplierProductDto } from '@/shared/api/dto/supplier';
-import api from '@/shared/api/http';
 import { Input } from '@/shared/ui/input';
 import { Button } from '@/shared/ui/button';
+import { getSupplierAllProducts } from '@/shared/api/supplier.ts';
 
 const columnsConfig = (
   editRowId: number | null,
@@ -83,7 +83,11 @@ const columnsConfig = (
       ) : row.original.previewImageId ? (
         `ID: ${row.original.previewImageId}`
       ) : (
-        '—'
+        <img
+          src="/mock-product.jpg"
+          alt="no preview"
+          className="h-14 w-14 object-cover rounded opacity-50"
+        />
       ),
   },
   {
@@ -107,16 +111,20 @@ const columnsConfig = (
   },
 ];
 
-export const SupplierProductsTable = () => {
+export const SupplierProductsTable = ({ refreshToken }: { refreshToken: number }) => {
   const [data, setData] = useState<SupplierProductDto[]>([]);
   const [editRowId, setEditRowId] = useState<number | null>(null);
   const [editedRow, setEditedRow] = useState<Partial<SupplierProductDto> | null>(null);
 
-  useEffect(() => {
-    api.get<SupplierProductDto[]>('supplier/my/products').then((res) => {
+  const fetchProducts = () => {
+    getSupplierAllProducts().then((res) => {
       setData(res.data);
     });
-  }, []);
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, [refreshToken]);
 
   const handleEdit = (row: SupplierProductDto) => {
     setEditRowId(row.id);
@@ -148,30 +156,37 @@ export const SupplierProductsTable = () => {
   return (
     <Card className="p-4">
       <h2 className="text-xl font-bold mb-4">Продукты поставщика</h2>
-      <table className="min-w-full bg-white rounded shadow overflow-hidden">
-        <thead>
-        {table.getHeaderGroups().map((headerGroup) => (
-          <tr key={headerGroup.id} className="border-b bg-gray-50">
-            {headerGroup.headers.map((header) => (
-              <th key={header.id} className="text-left p-3 font-medium text-gray-700">
-                {flexRender(header.column.columnDef.header, header.getContext())}
-              </th>
-            ))}
-          </tr>
-        ))}
-        </thead>
-        <tbody>
-        {table.getRowModel().rows.map((row) => (
-          <tr key={row.id} className="border-b hover:bg-gray-100">
-            {row.getVisibleCells().map((cell) => (
-              <td key={cell.id} className="p-3">
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </td>
-            ))}
-          </tr>
-        ))}
-        </tbody>
-      </table>
+
+      {data.length === 0 ? (
+        <p className="text-muted-foreground italic text-sm px-2 py-8 text-center">
+          Пока товаров нет.
+        </p>
+      ) : (
+        <table className="min-w-full bg-white rounded shadow overflow-hidden">
+          <thead>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <tr key={headerGroup.id} className="border-b bg-gray-50">
+              {headerGroup.headers.map((header) => (
+                <th key={header.id} className="text-left p-3 font-medium text-gray-700">
+                  {flexRender(header.column.columnDef.header, header.getContext())}
+                </th>
+              ))}
+            </tr>
+          ))}
+          </thead>
+          <tbody>
+          {table.getRowModel().rows.map((row) => (
+            <tr key={row.id} className="border-b hover:bg-gray-100">
+              {row.getVisibleCells().map((cell) => (
+                <td key={cell.id} className="p-3">
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </td>
+              ))}
+            </tr>
+          ))}
+          </tbody>
+        </table>
+      )}
     </Card>
   );
 };

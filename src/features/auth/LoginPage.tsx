@@ -18,9 +18,9 @@ export const LoginPage = () => {
     setError('');
     try {
       const res = await authUser(login, password);
-      console.log(res.data);
-      setAuth(res.data.user.login, res.data.user.role);
-      navigate(`/${res.data.role}`, { replace: true });
+      console.log(":: ", res.data);
+      setAuth(res.data.user.login, res.data.user.role, res.data.token);
+      navigate(`/${res.data.user.role}`, { replace: true });
     } catch (err) {
       setError('Invalid login or password');
     }

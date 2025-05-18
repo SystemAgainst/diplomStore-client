@@ -24,3 +24,12 @@ export interface MainDtoResponse {
   quantity: number;
   imageUrl: string;
 }
+
+export interface CreateProductDtoRequest {
+  title: string;
+  quantity: number;
+  price: string;
+  sellingPrice: string;
+  images: File[];
+}
+

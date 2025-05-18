@@ -22,7 +22,7 @@ export const RegisterPage = () => {
 
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const loginStore = useAuthStore((s) => s.login);
+  const authStore = useAuthStore((s) => s.login);
 
   const handleChange = (field: keyof RegisterSupplierDtoRequest) => (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [field]: e.target.value });
@@ -37,8 +37,7 @@ export const RegisterPage = () => {
     setError('');
     try {
       const res = await registerSupplier(form);
-      console.log(':: ', res.data);
-      loginStore(res.data.login, form.role);
+      authStore(res.data.user.login, form.role, res.data.token);
       navigate(`/${form.role}`, { replace: true });
     } catch (err) {
       setError('Ошибка регистрации. Проверьте введённые данные.');
