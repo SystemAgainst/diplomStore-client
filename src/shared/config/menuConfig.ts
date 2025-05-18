@@ -1,14 +1,14 @@
 export const menuConfig = {
-  supplier: [
+  "SUPPLIER": [
     { label: 'Мои продукты', path: '/supplier/products' },
     { label: 'Мои заказы', path: '/supplier/orders' },
   ],
-  client: [
+  "SOLE_TRADER": [
     { label: 'Каталог', path: 'client/me' },
     { label: 'Мои заказы', path: '/client/order' },
     { label: 'Моя корзина', path: '/client/cart' },
   ],
-  admin: [
+  "ADMIN": [
     { label: 'Панель администратора', path: '/admin' },
     { label: 'Пользователи', path: '/admin/users' },
   ],

@@ -10,13 +10,13 @@ import { useAuthStore } from '@/features/auth/useAuthStore.ts';
 
 export const RegisterPage = () => {
   const [form, setForm] = useState<RegisterSupplierDtoRequest>({
-    login: 's1',
-    password: '222222',
-    loginTelegram: '@s1',
-    chatId: '20001',
-    fio: 'Vlad Om',
-    email: 'test-s1@bk.ru',
-    phoneNumber: '88005553535',
+    login: 'supplier_user32',
+    password: 'securePasswo321rd123',
+    loginTelegram: 'supplier_tel312egram1',
+    chatId: 'supplier_tel312egram',
+    fio: 'Иванов Иван Иванович',
+    email: 'supplier321@example.com',
+    "phoneNumber": "+79991234567",
     role: ROLES.SUPPLIER,
   });
 
@@ -37,6 +37,7 @@ export const RegisterPage = () => {
     setError('');
     try {
       const res = await registerSupplier(form);
+      console.log(':: ', res.data);
       loginStore(res.data.login, form.role);
       navigate(`/${form.role}`, { replace: true });
     } catch (err) {
@@ -55,7 +56,7 @@ export const RegisterPage = () => {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="SUPPLIER">Поставщик</SelectItem>
-              <SelectItem value="CLIENT">Клиент</SelectItem>
+              <SelectItem value="SOLE_TRADER">Клиент</SelectItem>
             </SelectContent>
           </Select>
         </div>

@@ -1,6 +1,6 @@
 export const ROLES = {
   SUPPLIER: 'SUPPLIER',
-  CLIENT: 'CLIENT',
+  CLIENT: 'SOLE_TRADER',
   ADMIN: 'ADMIN',
 } as const;
 

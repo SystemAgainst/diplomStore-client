@@ -7,8 +7,8 @@ import { authUser } from '@/shared/api/user.ts';
 
 
 export const LoginPage = () => {
-  const [login, setLogin] = useState('client0');
-  const [password, setPassword] = useState('111111');
+  const [login, setLogin] = useState('supplier_user32');
+  const [password, setPassword] = useState('securePasswo321rd123');
   const [error, setError] = useState('');
   const setAuth = useAuthStore((s) => s.login);
   const navigate = useNavigate();
@@ -18,7 +18,8 @@ export const LoginPage = () => {
     setError('');
     try {
       const res = await authUser(login, password);
-      setAuth(res.data.login, res.data.role);
+      console.log(res.data);
+      setAuth(res.data.user.login, res.data.user.role);
       navigate(`/${res.data.role}`, { replace: true });
     } catch (err) {
       setError('Invalid login or password');
