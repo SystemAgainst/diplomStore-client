@@ -3,26 +3,32 @@ import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input';
 import { useNavigate } from 'react-router-dom';
 import type { RegisterSupplierDtoRequest } from '@/shared/api/dto/supplier';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select.tsx';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/shared/ui/select.tsx';
 import { type Role, ROLES } from '@/shared/const';
 import { registerSupplier } from '@/shared/api/user.ts';
-import { useAuthStore } from '@/features/auth/useAuthStore.ts';
+import { toast } from 'sonner';
+
 
 export const RegisterPage = () => {
   const [form, setForm] = useState<RegisterSupplierDtoRequest>({
-    login: 'supplier_user32',
-    password: 'securePasswo321rd123',
-    loginTelegram: 'supplier_tel312egram1',
-    chatId: 'supplier_tel312egram',
-    fio: 'Иванов Иван Иванович',
-    email: 'supplier321@example.com',
-    "phoneNumber": "+79991234567",
+    login: 'c1',
+    password: 'root0000',
+    loginTelegram: 'telegram_c1',
+    chatId: '23453249',
+    fio: 'Никита Ким',
+    email: 'c1@mail.ru',
+    phoneNumber: '+79991234569',
     role: ROLES.SUPPLIER,
   });
 
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const authStore = useAuthStore((s) => s.login);
 
   const handleChange = (field: keyof RegisterSupplierDtoRequest) => (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [field]: e.target.value });
@@ -36,9 +42,15 @@ export const RegisterPage = () => {
     e.preventDefault();
     setError('');
     try {
-      const res = await registerSupplier(form);
-      authStore(res.data.user.login, form.role, res.data.token);
-      navigate(`/${form.role}`, { replace: true });
+      await registerSupplier(form);
+
+      toast('Вы зарегистрированы!', {
+        description: 'Теперь вы можете войти в систему.',
+        duration: 3000,
+        position: 'top-center',
+      });
+
+      navigate('/auth');
     } catch (err) {
       setError('Ошибка регистрации. Проверьте введённые данные.');
     }

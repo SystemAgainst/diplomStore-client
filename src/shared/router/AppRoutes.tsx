@@ -27,17 +27,17 @@ export const AppRoutes = () => {
     return (
       <Routes>
         {/*SUPPLIER*/}
-        <Route path="/supplier/me" element={<SupplierDashboard />} />
-          <Route path="/supplier/products" element={<SupplierProductsPage />} />
-          <Route path="/supplier/orders" element={<SupplierOrdersPage />} />
+        <Route path="/SUPPLIER/me" element={<SupplierDashboard />} />
+          <Route path="/SUPPLIER/products" element={<SupplierProductsPage />} />
+          <Route path="/SUPPLIER/orders" element={<SupplierOrdersPage />} />
 
         {/*CLIENT*/}
-        <Route path="/client/me" element={<ClientDashboard />} />
-        <Route path="/client/cart" element={<ClientCart />} />
-        <Route path="/client/order" element={<ClientOrder />} />
+        <Route path="/SOLE_TRADER/me" element={<ClientDashboard />} />
+        <Route path="/SOLE_TRADER/cart" element={<ClientCart />} />
+        <Route path="/SOLE_TRADER/order" element={<ClientOrder />} />
 
         {/*ADMIN*/}
-        <Route path="/admin/me" element={<AdminDashboard />} />
+        <Route path="/ADMIN/me" element={<AdminDashboard />} />
 
         <Route path="*" element={<Navigate to={`/${role}/me`} replace />} />
       </Routes>

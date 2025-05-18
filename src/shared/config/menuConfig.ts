@@ -1,10 +1,11 @@
 export const menuConfig = {
   "SUPPLIER": [
-    { label: 'Мои продукты', path: '/supplier/products' },
-    { label: 'Мои заказы', path: '/supplier/orders' },
+    { label: 'Главная', path: '/SUPPLIER/me' },
+    { label: 'Мои продукты', path: '/SUPPLIER/products' },
+    { label: 'Мои заказы', path: '/SUPPLIER/orders' },
   ],
   "SOLE_TRADER": [
-    { label: 'Каталог', path: 'client/me' },
+    { label: 'Главная', path: 'client/me' },
     { label: 'Мои заказы', path: '/client/order' },
     { label: 'Моя корзина', path: '/client/cart' },
   ],
