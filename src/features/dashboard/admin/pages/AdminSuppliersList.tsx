@@ -4,6 +4,7 @@ import { getAllSuppliers } from '@/shared/api/admin.ts';
 import { useEffect, useState } from 'react';
 import { Card } from '@/shared/ui/card';
 import { ScrollArea } from '@/shared/ui/scroll-area';
+import type { Role } from '@/shared/const';
 
 interface Supplier {
   id: number;
@@ -14,6 +15,7 @@ interface Supplier {
   loginTelegram?: string | null;
   chatId?: string | null;
   active?: boolean;
+  role?: Role | null;
 }
 
 export const AdminSuppliersList = () => {
@@ -23,6 +25,7 @@ export const AdminSuppliersList = () => {
   const fetchData = async () => {
     try {
       const res = await getAllSuppliers();
+      console.log("suppliers ", res.data);
       setData(res.data);
     } catch (error) {
       console.error(error);
@@ -48,6 +51,7 @@ export const AdminSuppliersList = () => {
               {supplier.phoneNumber && <p><strong>Телефон:</strong> {supplier.phoneNumber}</p>}
               {supplier.loginTelegram && <p><strong>Telegram:</strong> {supplier.loginTelegram}</p>}
               {supplier.chatId && <p><strong>Chat ID:</strong> {supplier.chatId}</p>}
+              {supplier.role && <p><strong>Роль:</strong> {supplier.role}</p>}
               {typeof supplier.active === 'boolean' && (
                 <p>
                   <strong>Статус:</strong>{' '}
