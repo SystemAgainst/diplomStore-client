@@ -4,6 +4,7 @@ import type { MainDtoResponse, ProductInfoMainDtoResponse } from '@/shared/api/d
 import { Dialog, DialogContent, DialogTrigger } from '@/shared/ui/dialog';
 import { useState } from 'react';
 import { getProductById } from '@/shared/api/product.ts';
+import { useCartStore } from '@/features/cart/useCartStore';
 
 interface ClientProductCardProps {
   product: MainDtoResponse;
@@ -12,6 +13,7 @@ interface ClientProductCardProps {
 export const ClientProductCard = ({ product }: ClientProductCardProps) => {
   const [details, setDetails] = useState<ProductInfoMainDtoResponse | null>(null);
   const [open, setOpen] = useState(false);
+  const cart = useCartStore();
 
   const fetchDetails = async () => {
     try {
@@ -27,6 +29,18 @@ export const ClientProductCard = ({ product }: ClientProductCardProps) => {
     if (isOpen && !details) {
       fetchDetails();
     }
+  };
+
+  const quantityInCart = cart.items.find((item) =>
+    item.productId === product.id)?.quantity || 0;
+
+  const handleAddToCart = () => {
+    cart.addItem({
+      productId: product.id,
+      title: product.title,
+      price: product.price,
+      image: product.imageUrl,
+    });
   };
 
   return (
@@ -61,8 +75,9 @@ export const ClientProductCard = ({ product }: ClientProductCardProps) => {
             <p><strong>Цена:</strong> {details.price} ₽</p>
             <p><strong>Остаток на складе:</strong> {details.quantity} шт.</p>
             <p><strong>Продавец:</strong> {details.supplierLogin}</p>
-            <Button className="w-full">Добавить в корзину</Button>
-          </div>
+            <Button className="w-full" onClick={handleAddToCart}>
+              {quantityInCart > 0 ? `В корзине: ${quantityInCart}` : 'Добавить в корзину'}
+            </Button>          </div>
         ) : (
           <p>Загрузка...</p>
         )}
