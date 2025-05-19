@@ -10,7 +10,9 @@ export const menuConfig = {
     { label: 'Моя корзина', path: '/SOLE_TRADER/cart' },
   ],
   "ADMIN": [
-    { label: 'Панель администратора', path: '/ADMIN/me' },
-    { label: 'Пользователи', path: '/admin/users' },
+    { label: 'Главная', path: '/ADMIN/me' },
+    { label: 'Клиенты', path: '/ADMIN/clients' },
+    { label: 'Поставщики', path: '/ADMIN/suppliers' },
+    { label: 'Все товары', path: '/ADMIN/products' },
   ],
 } as const;
