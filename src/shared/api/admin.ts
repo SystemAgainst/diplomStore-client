@@ -17,3 +17,4 @@ export const getAllProducts = () =>
 
 export const removeProductById = (id: number) =>
   api.del(`admin/products/delete/${id}`);
+
