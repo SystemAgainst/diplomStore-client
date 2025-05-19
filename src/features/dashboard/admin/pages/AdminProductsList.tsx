@@ -55,7 +55,7 @@ export const AdminProductsList = () => {
     <DashboardLayout roleBasedMenuSlot={menu}>
       <h1 className="text-2xl font-bold mb-6">Список продуктов</h1>
 
-      <ScrollArea className="h-[500px] rounded-md border p-4">
+      <ScrollArea className="h-[900px] rounded-md border p-4">
         <div className="space-y-4">
           {products.map((product) => (
             <Card key={product.id} className="p-4 space-y-2 text-sm flex justify-between items-start">

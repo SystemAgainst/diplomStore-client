@@ -39,7 +39,7 @@ export const AdminClientsList = () => {
       <ScrollArea className="h-[900px] rounded-md border p-4">
         <div className="space-y-4">
           {clients.map((client) => (
-            <Card key={client.id} className="p-4 space-y-1 text-sm">
+            <Card key={client.id} className="p-4 space-y-1 text-sm gap-0">
               <p><strong>ID:</strong> {client.id}</p>
               <p><strong>Логин:</strong> {client.login}</p>
               {client.loginTelegram && <p><strong>Telegram:</strong> {client.loginTelegram}</p>}

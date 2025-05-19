@@ -43,7 +43,7 @@ export const AdminSuppliersList = () => {
       <ScrollArea className="h-[900px] rounded-md border p-4">
         <div className="space-y-4">
           {data.map((supplier) => (
-            <Card key={supplier.id} className="p-4 space-y-1 text-sm">
+            <Card key={supplier.id} className="p-4 space-y-1 text-sm gap-0">
               <p><strong>ID:</strong> {supplier.id}</p>
               <p><strong>Логин:</strong> {supplier.login}</p>
               {supplier.fio && <p><strong>ФИО:</strong> {supplier.fio}</p>}
