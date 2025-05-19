@@ -22,6 +22,7 @@ export const LoginPage = () => {
       setAuth(res.data.user.login, res.data.user.role, res.data.token);
       navigate(`/${res.data.user.role}`, { replace: true });
     } catch (err) {
+      console.error(err);
       setError('Invalid login or password');
     }
   };
