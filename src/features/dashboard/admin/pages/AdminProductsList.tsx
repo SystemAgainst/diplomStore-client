@@ -16,6 +16,12 @@ interface Product {
   supplierLogin?: string;
 }
 
+/**
+ * TODO:
+ * [] - test delete api after git pull.
+ * [] - ban and unban for client and supplier (make disable card)
+ *
+ * */
 export const AdminProductsList = () => {
   const menu = useRoleMenu();
   const [products, setProducts] = useState<Product[]>([]);
