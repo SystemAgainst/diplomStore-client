@@ -9,7 +9,6 @@ export const ClientProductsGrid = () => {
   const fetchAllProducts = async () => {
     try {
       const res = await getAllProducts();
-      console.log("all products", res.data);
 
       setProducts(res.data);
     } catch (error) {

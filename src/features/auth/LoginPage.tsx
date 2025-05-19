@@ -7,9 +7,10 @@ import { authUser } from '@/shared/api/user.ts';
 
 
 export const LoginPage = () => {
-  const [login, setLogin] = useState('supplier_user32');
-  const [password, setPassword] = useState('securePasswo321rd123');
+  const [login, setLogin] = useState('Arsen020');
+  const [password, setPassword] = useState('batman05');
   const [error, setError] = useState('');
+
   const setAuth = useAuthStore((s) => s.login);
   const navigate = useNavigate();
 
@@ -18,7 +19,6 @@ export const LoginPage = () => {
     setError('');
     try {
       const res = await authUser(login, password);
-      console.log(":: ", res.data);
       setAuth(res.data.user.login, res.data.user.role, res.data.token);
       navigate(`/${res.data.user.role}`, { replace: true });
     } catch (err) {
