@@ -6,7 +6,7 @@ import { AdminDashboard } from '@/features/dashboard/admin/AdminDashboard.tsx';
 import { useAuthStore } from '@/features/auth/useAuthStore';
 import { RegisterPage } from '@/features/auth/RegisterPage';
 import { SupplierProductsPage } from '@/features/dashboard/supplier/pages/SupplierProductsPage.tsx';
-import { SupplierOrdersPage } from '@/features/dashboard/supplier/pages/SupplierOrdersPage.tsx';
+import { SupplierOrder } from '@/features/dashboard/supplier/pages/SupplierOrder.tsx';
 import { ClientCart } from '@/features/dashboard/client/pages/ClientCart.tsx';
 import { ClientOrder } from '@/features/dashboard/client/pages/ClientOrder.tsx';
 import { AdminClientsList } from '@/features/dashboard/admin/pages/AdminClientsList.tsx';
@@ -32,7 +32,7 @@ export const AppRoutes = () => {
         {/*SUPPLIER*/}
         <Route path="/SUPPLIER/me" element={<SupplierDashboard />} />
           <Route path="/SUPPLIER/products" element={<SupplierProductsPage />} />
-          <Route path="/SUPPLIER/order" element={<SupplierOrdersPage />} />
+          <Route path="/SUPPLIER/order" element={<SupplierOrder />} />
 
         {/*CLIENT*/}
         <Route path="/SOLE_TRADER/me" element={<ClientDashboard />} />

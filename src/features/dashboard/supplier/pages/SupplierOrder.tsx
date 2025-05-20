@@ -2,7 +2,7 @@ import { useRoleMenu } from '@/shared/hooks/useRoleMenu';
 import { DashboardLayout } from '@/features/dashboard/DashboardLayout.tsx';
 import { Card } from '@/shared/ui/card.tsx';
 
-export const SupplierOrdersPage = () => {
+export const SupplierOrder = () => {
   const menu = useRoleMenu();
 
   return (
