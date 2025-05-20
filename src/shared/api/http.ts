@@ -66,6 +66,9 @@ const del = <T = any>(uri: string, requestConfig = {}) =>
 const patch = <T = any>(uri: string, data: any = {}, requestConfig = {}) =>
   instance.patch<T>(uri, data, requestConfig);
 
+const postWithoutBody = <T = any>(uri: string, requestConfig = {}) =>
+  instance.post<T>(uri, null, requestConfig);
+
 export default {
   instance,
   get,
@@ -73,4 +76,5 @@ export default {
   put,
   del,
   patch,
+  postWithoutBody,
 };

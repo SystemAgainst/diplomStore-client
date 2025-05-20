@@ -1,10 +1,10 @@
 import api from './http';
 
 export const banUserByLogin = (login: string) =>
-  api.post('admin/ban', login);
+  api.postWithoutBody(`admin/ban/${login}`);
 
 export const unBanUserByLogin = (login: string) =>
-  api.post('admin/unBan', login);
+  api.postWithoutBody(`admin/unBan/${login}`);
 
 export const getAllSuppliers = () =>
   api.get('admin/suppliers');

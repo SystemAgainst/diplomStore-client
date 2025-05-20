@@ -18,8 +18,8 @@ interface Product {
 
 /**
  * TODO:
- * [] - test delete api after git pull.
- * [] - ban and unban for client and supplier (make disable card)
+ * [x] - test delete api after git pull.
+ * [x] - ban and unban for client and supplier (make disable card)
  *
  * */
 export const AdminProductsList = () => {
