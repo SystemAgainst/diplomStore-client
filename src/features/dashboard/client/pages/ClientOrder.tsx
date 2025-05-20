@@ -14,7 +14,7 @@ import { OrderStatus } from '@/shared/api/dto/order.ts';
  * [] - fix detail of order  (client and supplier)
  * [] - download pdf-file with order's detail after payment button clicking (user)
  * [] - page with canceled and payed orders
- * [] - filtered orders by status for suppliers
+ * [x] - filtered orders by status for suppliers
  * [] - handle status "DELIVERED". He is wanished after getting this status (supplier role)
  * */
 

@@ -12,7 +12,9 @@ import {
   orderCanceled,
   orderConfirmed,
 } from '@/shared/api/supplier';
-import { OrderStatus, type OrderStatusDtoResponse,
+import {
+  OrderStatus,
+  type OrderStatusDtoResponse,
 } from '@/shared/api/dto/order';
 
 export const SupplierOrder = () => {
@@ -90,7 +92,7 @@ export const SupplierOrder = () => {
         {order.status === OrderStatus.CONFIRMED && (
           <>
             <Button onClick={() => handleAction(order.id, 'ship')}>В путь</Button>
-            <Button disabled>Доставлено</Button> {/* Пока disable */}
+            <Button disabled>Доставлено</Button>
           </>
         )}
 
@@ -106,9 +108,9 @@ export const SupplierOrder = () => {
 
   const pendingOrders = orders.filter((o) => o.status === OrderStatus.PENDING);
   const confirmedOrders = orders.filter(
-    (o) =>
-      o.status === OrderStatus.CONFIRMED || o.status === OrderStatus.SHIPPED
+    (o) => o.status === OrderStatus.CONFIRMED || o.status === OrderStatus.SHIPPED
   );
+  const cancelledOrders = orders.filter((o) => o.status === OrderStatus.CANCELLED);
 
   return (
     <DashboardLayout roleBasedMenuSlot={menu}>
@@ -120,6 +122,7 @@ export const SupplierOrder = () => {
           <TabsList>
             <TabsTrigger value="pending">Новые</TabsTrigger>
             <TabsTrigger value="confirmed">Принятые</TabsTrigger>
+            <TabsTrigger value="cancelled">Отклоненные</TabsTrigger>
           </TabsList>
 
           <TabsContent value="pending" className="space-y-4 mt-4">
@@ -134,7 +137,15 @@ export const SupplierOrder = () => {
             {confirmedOrders.length > 0 ? (
               confirmedOrders.map(renderOrderCard)
             ) : (
-              <Card className="p-4 text-center">Нет принятых заказов</Card>
+              <Card  className="p-4 text-center">Нет принятых заказов</Card>
+            )}
+          </TabsContent>
+
+          <TabsContent value="cancelled" className="space-y-4 mt-4">
+            {cancelledOrders.length > 0 ? (
+              cancelledOrders.map(renderOrderCard)
+            ) : (
+              <Card className="p-4 text-center">Нет отклоненных заказов</Card>
             )}
           </TabsContent>
         </Tabs>
