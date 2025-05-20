@@ -25,5 +25,5 @@ export const useInitUser = () => {
           logout(); // если токен недействителен
         });
     }
-  }, []);
+  }, [login, logout, user]);
 };
