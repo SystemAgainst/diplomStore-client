@@ -4,8 +4,9 @@ export interface MainDtoResponse {
   id: number;
   title: string;
   price: number;
-  sellingPrice: number;
+  sellingPrice?: number;
   quantity: number;
-  imageUrl: string;
+  productUrl?: string;
+  imageUrl?: string;
   supplier: SupplierDto
 }

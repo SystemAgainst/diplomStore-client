@@ -1,19 +1,20 @@
 import { useEffect, useState } from 'react';
 import { type ColumnDef, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { Card } from '@/shared/ui/card';
-import type { SupplierProductDto } from '@/shared/api/dto/supplier';
 import { Input } from '@/shared/ui/input';
 import { Button } from '@/shared/ui/button';
 import { getSupplierAllProducts } from '@/shared/api/supplier.ts';
+import type { MainDtoResponse as ProductDtoResponse} from '@/shared/api/dto/product.ts';
+import { getFullImageUrl } from '@/shared/const';
 
 const columnsConfig = (
   editRowId: number | null,
-  editedRow: Partial<SupplierProductDto> | null,
-  onEdit: (row: SupplierProductDto) => void,
+  editedRow: Partial<ProductDtoResponse> | null,
+  onEdit: (row: ProductDtoResponse) => void,
   onCancel: () => void,
   onSave: (id: number) => void,
-  onChangeField: (field: keyof SupplierProductDto, value: string | number) => void
-): ColumnDef<SupplierProductDto>[] => [
+  onChangeField: (field: keyof ProductDtoResponse, value: string | number) => void
+): ColumnDef<ProductDtoResponse>[] => [
   { accessorKey: 'id', header: 'ID' },
   {
     accessorKey: 'title',
@@ -71,22 +72,21 @@ const columnsConfig = (
       ),
   },
   {
-    accessorKey: 'previewImageId',
-    header: 'Превью',
+    accessorKey: 'imageUrl',
+    header: 'Изображение',
     cell: ({ row }) =>
       editRowId === row.original.id ? (
         <Input
-          type="number"
-          value={editedRow?.previewImageId ?? ''}
-          onChange={(e) => onChangeField('previewImageId', Number(e.target.value))}
+          type="text"
+          value={editedRow?.imageUrl ?? ''}
+          onChange={(e) => onChangeField('imageUrl', e.target.value)}
         />
-      ) : row.original.previewImageId ? (
-        `ID: ${row.original.previewImageId}`
       ) : (
         <img
-          src="/mock-product.jpg"
-          alt="no preview"
-          className="h-14 w-14 object-cover rounded opacity-50"
+          src={getFullImageUrl(row.original.imageUrl)}
+          alt="preview"
+          className="h-14 w-14 object-cover rounded"
+          onError={(e) => ((e.target as HTMLImageElement).src = '/mock-product.jpg')}
         />
       ),
   },
@@ -112,14 +112,13 @@ const columnsConfig = (
 ];
 
 export const SupplierProductsTable = ({ refreshToken }: { refreshToken: number }) => {
-  const [data, setData] = useState<SupplierProductDto[]>([]);
+  const [data, setData] = useState<ProductDtoResponse[]>([]);
   const [editRowId, setEditRowId] = useState<number | null>(null);
-  const [editedRow, setEditedRow] = useState<Partial<SupplierProductDto> | null>(null);
+  const [editedRow, setEditedRow] = useState<Partial<ProductDtoResponse> | null>(null);
 
   const fetchProducts = async () => {
     try {
       const res = await getSupplierAllProducts();
-      console.log("getSupplierAllProducts", res.data);
       setData(res.data);
     } catch (error) {
       console.error(error);
@@ -130,7 +129,7 @@ export const SupplierProductsTable = ({ refreshToken }: { refreshToken: number }
     fetchProducts();
   }, [refreshToken]);
 
-  const handleEdit = (row: SupplierProductDto) => {
+  const handleEdit = (row: ProductDtoResponse) => {
     setEditRowId(row.id);
     setEditedRow({ ...row });
   };
@@ -140,7 +139,7 @@ export const SupplierProductsTable = ({ refreshToken }: { refreshToken: number }
     setEditedRow(null);
   };
 
-  const handleChangeField = (field: keyof SupplierProductDto, value: string | number) => {
+  const handleChangeField = (field: keyof ProductDtoResponse, value: string | number) => {
     setEditedRow((prev) => ({ ...prev!, [field]: value }));
   };
 

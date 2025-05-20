@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { getProductById } from '@/shared/api/product.ts';
 import { useCartStore } from '@/features/cart/useCartStore';
 import { cartAdd } from '@/shared/api/cart.ts';
+import { API_URL } from '@/shared/const';
 
 interface ClientProductCardProps {
   product: ProductDtoResponse;
@@ -50,6 +51,9 @@ export const ClientProductCard = ({ product }: ClientProductCardProps) => {
     }
   };
 
+  const fullImageUrl = details?.imageUrl?.startsWith('http')
+    ? details.imageUrl
+    : `${API_URL}${details?.imageUrl || ''}`;
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
@@ -75,12 +79,12 @@ export const ClientProductCard = ({ product }: ClientProductCardProps) => {
         {details ? (
           <div className="space-y-4">
             <img
-              src={details.imageUrl || product.imageUrl || '/mock-product.jpg'}
-              alt={details.title || product.title}
+              src={fullImageUrl || '/mock-product.jpg'}
+              alt={details.title}
               className="w-full h-64 object-cover rounded"
               onError={(e) => ((e.target as HTMLImageElement).src = '/mock-product.jpg')}
             />
-            {new Intl.NumberFormat('ru-RU').format(details.sellingPrice)} ₽
+            <p><strong>Цена:</strong> {new Intl.NumberFormat('ru-RU').format(details.price)} ₽</p>
             <p><strong>Остаток на складе:</strong> {details.quantity} шт.</p>
             <p><strong>Продавец:</strong> {details.supplier.login}</p>
             <Button className="w-full" onClick={handleAddToCart}>

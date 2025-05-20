@@ -12,15 +12,6 @@ export interface SupplierDto {
   active: boolean;
 }
 
-export interface SupplierProductDto {
-  id: number;
-  title: string;
-  quantity: number;
-  sellingPrice: number;
-  price: number;
-  previewImageId: number | null;
-}
-
 export interface OrderSupplierDto {
   id: number;
   status: string;

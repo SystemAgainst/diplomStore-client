@@ -96,14 +96,20 @@ export function CreateProductModal({ onProductCreated }: CreateProductModalProps
           </div>
           <div className="space-y-2">
             <Label htmlFor="price">Закупочная цена</Label>
-            <Input id="price" name="price" value={form.price} onChange={handleChange} required />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="sellingPrice">Цена продажи</Label>
             <Input
               id="sellingPrice"
               name="sellingPrice"
               value={form.sellingPrice}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="sellingPrice">Цена продажи</Label>
+            <Input
+              id="price"
+              name="price"
+              value={form.price}
               onChange={handleChange}
               required
             />
