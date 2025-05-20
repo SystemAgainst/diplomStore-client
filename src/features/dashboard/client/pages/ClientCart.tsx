@@ -13,14 +13,15 @@ import { toast } from 'sonner';
 
 export const ClientCart = () => {
   const menu = useRoleMenu();
+  const navigate = useNavigate();
+
   const cartItems = useCartStore((s) => s.items);
   const total = useCartStore((s) => s.totalPrice);
   const remove = useCartStore((s) => s.removeItem);
   const hydrate = useCartStore((s) => s.hydrateCart);
   const increase = useCartStore((s) => s.increaseQuantity);
   const decrease = useCartStore((s) => s.decreaseQuantity);
-  const clearCart = useCartStore((s) => s.clearCart);
-  const navigate = useNavigate();
+  const createOrderAndProceed = useCartStore((s) => s.createOrderAndProceed);
 
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
@@ -29,7 +30,6 @@ export const ClientCart = () => {
     try {
       const res = await getClientCart();
       hydrate(res.data.items);
-      clearCart();
     } catch (e) {
       toast.error('Ошибка при загрузке корзины');
       console.error(e);
@@ -40,16 +40,19 @@ export const ClientCart = () => {
     loadCart();
   }, [hydrate]);
 
-  const handleProceed = () => {
+  const handleProceed = async () => {
     if (!address || !city) {
       toast.error('Пожалуйста, введите адрес и город');
       return;
     }
 
-    // Можно сохранить данные временно, например, в sessionStorage
-    sessionStorage.setItem('clientLocation', JSON.stringify({ address, city }));
-
-    navigate('/SOLE_TRADER/order');
+    try {
+      await createOrderAndProceed({ address, city });
+      navigate('/SOLE_TRADER/order');
+    } catch (e) {
+      console.error(e);
+      toast.error('Не удалось оформить заказ');
+    }
   };
 
   return (
@@ -75,7 +78,7 @@ export const ClientCart = () => {
                 />
                 <div>
                   <h3 className="font-semibold text-lg">{item.title}</h3>
-                  <p className="text-muted-foreground">{item.price} ₽</p>
+                  <p className="text-muted-foreground">{item.total} ₽</p>
                 </div>
               </div>
 

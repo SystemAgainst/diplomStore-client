@@ -1,7 +1,9 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { cartIncreaseItem, cartDecreaseItem } from '@/shared/api/cart'; // предполагается, что они есть
+import { cartIncreaseItem, cartDecreaseItem, removeFromCartById } from '@/shared/api/cart'; // предполагается, что они есть
 import type { CartItemFromApi } from '@/shared/api/dto/cart';
+import type { ClientLocation } from '@/shared/api/dto/client.ts';
+import { createOrder } from '@/shared/api/clientOrder.ts';
 
 interface CartState {
   items: CartItemFromApi[];
@@ -11,8 +13,8 @@ interface CartState {
   removeItem: (cartItemId: number) => void;
   increaseQuantity: (cartItemId: number) => Promise<void>;
   decreaseQuantity: (cartItemId: number) => Promise<void>;
-  clearCart: () => void;
   getQuantity: (productId: number) => number;
+  createOrderAndProceed: (location: ClientLocation) => Promise<void>;
 }
 
 export const useCartStore = create<CartState>()(
@@ -20,6 +22,18 @@ export const useCartStore = create<CartState>()(
     (set, get) => ({
       items: [],
       totalPrice: 0,
+
+      createOrderAndProceed: async ({ address, city }) => {
+        try {
+          await createOrder({ address, city });
+          sessionStorage.setItem('clientLocation', JSON.stringify({ address, city }));
+
+          set({ items: [], totalPrice: 0 });
+        } catch (e) {
+          console.error('Ошибка при оформлении заказа:', e);
+          throw e;
+        }
+      },
 
       hydrateCart: (items) => {
         set({
@@ -52,7 +66,9 @@ export const useCartStore = create<CartState>()(
         });
       },
 
-      removeItem: (cartItemId) => {
+      removeItem: async (cartItemId) => {
+        await removeFromCartById(cartItemId);
+
         const updatedItems = get().items.filter((i) => i.id !== cartItemId);
         set({
           items: updatedItems,
@@ -107,8 +123,6 @@ export const useCartStore = create<CartState>()(
           console.error('Ошибка при уменьшении:', e);
         }
       },
-
-      clearCart: () => set({ items: [], totalPrice: 0 }),
 
       getQuantity: (productId) =>
         get().items.find((i) => i.productId === productId)?.quantity ?? 0,
