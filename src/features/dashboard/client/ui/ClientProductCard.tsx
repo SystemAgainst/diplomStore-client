@@ -1,7 +1,7 @@
 import { Card } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import type { MainDtoResponse, ProductInfoMainDtoResponse } from '@/shared/api/dto/product';
-import { Dialog, DialogContent, DialogTrigger } from '@/shared/ui/dialog';
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/shared/ui/dialog';
 import { useState } from 'react';
 import { getProductById } from '@/shared/api/product.ts';
 import { useCartStore } from '@/features/cart/useCartStore';
@@ -71,6 +71,7 @@ export const ClientProductCard = ({ product }: ClientProductCardProps) => {
       </Card>
 
       <DialogContent className="max-w-md mx-auto">
+        <DialogTitle>{details?.title || 'Детали товара'}</DialogTitle>
         {details ? (
           <div className="space-y-4">
             <img
@@ -79,7 +80,6 @@ export const ClientProductCard = ({ product }: ClientProductCardProps) => {
               className="w-full h-64 object-cover rounded"
               onError={(e) => ((e.target as HTMLImageElement).src = '/mock-product.jpg')}
             />
-            <h2 className="text-2xl font-bold">{details.title}</h2>
             <p><strong>Цена:</strong> {details.price} ₽</p>
             <p><strong>Остаток на складе:</strong> {details.quantity} шт.</p>
             <p><strong>Продавец:</strong> {details.supplierLogin}</p>
