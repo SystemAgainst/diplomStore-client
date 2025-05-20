@@ -39,21 +39,15 @@ export const ClientCart = () => {
 
   useEffect(() => {
     loadCart();
-  }, [hydrate]);
+  }, []);
 
   const handleProceed = async () => {
-    if (!address || !city) {
-      toast.error('Пожалуйста, введите адрес и город');
-      return;
-    }
-
     try {
       setLoading(true);
       await createOrderAndProceed({ address, city });
       navigate('/SOLE_TRADER/order');
-    } catch (e) {
-      console.error(e);
-      toast.error('Не удалось оформить заказ');
+    } catch (e: any) {
+      toast.error(e.message);
     } finally {
       setLoading(false);
     }

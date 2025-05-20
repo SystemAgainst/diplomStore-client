@@ -8,8 +8,7 @@ export const createOrder = (data: ClientLocation) =>
 export const getAllClientOrders = () =>
   api.get(`client/my/orders`);
 
-// Проверка корзины перед оформлением (актуальность)
-export const checkoutOrder = () =>
+export const validateCartBeforeCheckout = () =>
   api.get('order/checkout');
 
 export const orderPayedByClient = (id: number) =>

@@ -5,7 +5,7 @@ import {
   cartIncreaseItem,
   removeFromCartById,
 } from '@/shared/api/cart';
-import { createOrder } from '@/shared/api/clientOrder.ts';
+import { createOrder, validateCartBeforeCheckout } from '@/shared/api/clientOrder.ts';
 import type { CartItemFromApi } from '@/shared/api/dto/cart';
 import type { ClientLocation } from '@/shared/api/dto/client.ts';
 
@@ -24,7 +24,7 @@ interface CartState {
 export const useCartStore = create<CartState>()(
   persist(
     (set, get) => {
-      const recalculateTotal = (items: CartItemFromApi[]) =>
+      const recalculateTotal = (items: CartItemFromApi[] = []) =>
         items.reduce((sum, i) => sum + i.price * i.quantity, 0);
 
       return {
@@ -32,9 +32,10 @@ export const useCartStore = create<CartState>()(
         totalPrice: 0,
 
         hydrateCart: (items) => {
+          const safeItems = items ?? [];
           set({
-            items,
-            totalPrice: recalculateTotal(items),
+            items: safeItems,
+            totalPrice: recalculateTotal(safeItems),
           });
         },
 
@@ -128,6 +129,13 @@ export const useCartStore = create<CartState>()(
 
         createOrderAndProceed: async ({ address, city }) => {
           try {
+            const res = await validateCartBeforeCheckout();
+            console.log("validateCartBeforeCheckout", res);
+
+            if (res.data?.valid === false || res.data?.empty === true) {
+              throw new Error('Корзина невалидна или пуста');
+            }
+
             await createOrder({ address, city });
             sessionStorage.setItem('clientLocation', JSON.stringify({ address, city }));
 
