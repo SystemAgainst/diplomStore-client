@@ -5,6 +5,7 @@ import { Card } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import { Separator } from '@/shared/ui/separator';
 import { Trash2, Minus, Plus } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export const ClientCart = () => {
   const menu = useRoleMenu();
@@ -13,6 +14,7 @@ export const ClientCart = () => {
   const remove = useCartStore((s) => s.removeItem);
   const increase = useCartStore((s) => s.increaseQuantity);
   const decrease = useCartStore((s) => s.decreaseQuantity);
+  const navigate = useNavigate();
 
   return (
     <DashboardLayout roleBasedMenuSlot={menu}>
@@ -68,7 +70,7 @@ export const ClientCart = () => {
             <span className="text-xl font-bold">{total} ₽</span>
           </div>
 
-          <Button className="w-full text-lg mt-4">
+          <Button className="w-full text-lg mt-4" onClick={() => navigate('/SOLE_TRADER/order')}>
             Перейти к оформлению
           </Button>
         </div>

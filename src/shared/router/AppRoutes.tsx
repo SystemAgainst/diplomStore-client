@@ -32,7 +32,7 @@ export const AppRoutes = () => {
         {/*SUPPLIER*/}
         <Route path="/SUPPLIER/me" element={<SupplierDashboard />} />
           <Route path="/SUPPLIER/products" element={<SupplierProductsPage />} />
-          <Route path="/SUPPLIER/orders" element={<SupplierOrdersPage />} />
+          <Route path="/SUPPLIER/order" element={<SupplierOrdersPage />} />
 
         {/*CLIENT*/}
         <Route path="/SOLE_TRADER/me" element={<ClientDashboard />} />
