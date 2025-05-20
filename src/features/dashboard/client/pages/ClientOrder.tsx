@@ -8,11 +8,10 @@ import {
 } from '@/shared/api/clientOrder';
 import { Card } from '@/shared/ui/card';
 import { toast } from 'sonner';
-import { Badge } from '@/shared/ui/badge';
-import { Button } from '@/shared/ui/button';
 import type { OrderClientDtoResponse } from '@/shared/api/dto/client.ts';
 import { OrderStatus, OrderStatusLabels } from '@/shared/api/dto/order.ts';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/shared/ui/tabs';
+import { OrderCard } from '@/features/order/OrderCard.tsx';
 
 
 /**
@@ -67,62 +66,6 @@ export const ClientOrder = () => {
     }
   };
 
-  const renderOrder = (order: OrderClientDtoResponse) => (
-    <Card key={order.id} className="p-4 space-y-4">
-      <div className="flex justify-between items-center">
-        <div>
-          <h2 className="text-xl font-semibold">Заказ #{order.id}</h2>
-          <p className="text-muted-foreground">
-            Дата: {new Date(order.dateTime).toLocaleString()}
-          </p>
-        </div>
-        <div className="text-right">
-          <Badge>{OrderStatusLabels[order.status]}</Badge>
-          <p className="text-lg font-bold">{order.totalCost} ₽</p>
-        </div>
-      </div>
-
-      {order.items?.length ? (
-        <div className="space-y-2">
-          {order.items.map((item, idx) => (
-            <div key={idx} className="flex justify-between items-center">
-              <div className="flex items-center gap-3">
-                <img
-                  src={item.image || '/mock-product.jpg'}
-                  alt={item.title}
-                  className="w-12 h-12 object-cover rounded"
-                  onError={(e) =>
-                    ((e.target as HTMLImageElement).src = '/mock-product.jpg')
-                  }
-                />
-                <div>
-                  <p className="font-medium">{item.title}</p>
-                  <p className="text-sm text-muted-foreground">
-                    {item.quantity} × {item.price} ₽
-                  </p>
-                </div>
-              </div>
-              <span className="font-bold">{item.total} ₽</span>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <p className="text-sm text-muted-foreground">Нет данных о товарах</p>
-      )}
-
-      <div className="flex justify-end gap-2 pt-4">
-        <Button onClick={() => handlePay(order.id)}>Оплатить</Button>
-        <Button
-          variant="destructive"
-          disabled={order.status !== OrderStatus.DELIVERED}
-          onClick={() => handleCancel(order.id)}
-        >
-          Отменить
-        </Button>
-      </div>
-    </Card>
-  );
-
   const filteredOrders =
     activeTab === 'ALL' ? orders : orders.filter((o) => o.status === activeTab);
 
@@ -158,13 +101,21 @@ export const ClientOrder = () => {
 
           <TabsContent value={activeTab} className="space-y-6 max-h-[900px] overflow-y-auto pr-2">
             {filteredOrders.length > 0 ? (
-              filteredOrders.map(renderOrder)
+              filteredOrders.map((order) => (
+                <OrderCard
+                  key={order.id}
+                  order={order}
+                  onPay={handlePay}
+                  onCancel={handleCancel}
+                />
+              ))
             ) : (
               <Card className="p-6 text-center text-muted-foreground">
                 Нет заказов в этом статусе
               </Card>
             )}
           </TabsContent>
+
         </Tabs>
       )}
     </DashboardLayout>
