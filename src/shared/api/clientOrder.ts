@@ -1,8 +1,11 @@
 import api from './http';
+import type { ClientLocation } from '@/shared/api/dto/client.ts';
 
 // Создать заказ (оформление корзины)
-export const createOrder = () =>
-  api.postWithoutBody('order/create');
+export const createOrder = (data: ClientLocation) =>
+  api.postWithoutBody('order/create', data);
+
+export const getAllClientOrders = () => api.get(`client/my/orders`);
 
 // Проверка корзины перед оформлением (актуальность)
 export const checkoutOrder = () =>

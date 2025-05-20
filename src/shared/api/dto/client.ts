@@ -12,3 +12,8 @@ export interface RegisterClientDtoRequest {
   password: string;
   role: Role;
 }
+
+export interface ClientLocation {
+  address: string;
+  city: string;
+}

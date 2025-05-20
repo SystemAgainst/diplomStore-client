@@ -1,10 +1,11 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { DashboardLayout } from '@/features/dashboard/DashboardLayout';
 import { useRoleMenu } from '@/shared/hooks/useRoleMenu';
 import { useCartStore } from '@/features/cart/useCartStore';
 import { Card } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import { Separator } from '@/shared/ui/separator';
+import { Input } from '@/shared/ui/input'; // добавь импорт input
 import { Trash2, Minus, Plus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { getClientCart } from '@/shared/api/cart';
@@ -18,21 +19,38 @@ export const ClientCart = () => {
   const hydrate = useCartStore((s) => s.hydrateCart);
   const increase = useCartStore((s) => s.increaseQuantity);
   const decrease = useCartStore((s) => s.decreaseQuantity);
+  const clearCart = useCartStore((s) => s.clearCart);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const loadCart = async () => {
-      try {
-        const res = await getClientCart(); // должна вернуть { items, price }
-        hydrate(res.data.items);
-      } catch (e) {
-        toast.error('Ошибка при загрузке корзины');
-        console.error(e);
-      }
-    };
+  const [address, setAddress] = useState('');
+  const [city, setCity] = useState('');
 
+  const loadCart = async () => {
+    try {
+      const res = await getClientCart();
+      hydrate(res.data.items);
+      clearCart();
+    } catch (e) {
+      toast.error('Ошибка при загрузке корзины');
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {
     loadCart();
   }, [hydrate]);
+
+  const handleProceed = () => {
+    if (!address || !city) {
+      toast.error('Пожалуйста, введите адрес и город');
+      return;
+    }
+
+    // Можно сохранить данные временно, например, в sessionStorage
+    sessionStorage.setItem('clientLocation', JSON.stringify({ address, city }));
+
+    navigate('/SOLE_TRADER/order');
+  };
 
   return (
     <DashboardLayout roleBasedMenuSlot={menu}>
@@ -82,14 +100,29 @@ export const ClientCart = () => {
 
           <Separator />
 
-          <div className="flex justify-between items-center px-2">
-            <span className="text-xl font-bold">Итого:</span>
-            <span className="text-xl font-bold">{total} ₽</span>
-          </div>
+          <div className="flex flex-col gap-4 px-2">
+            <div className="flex flex-col gap-2">
+              <Input
+                placeholder="Адрес доставки"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+              />
+              <Input
+                placeholder="Город"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+              />
+            </div>
 
-          <Button className="w-full text-lg mt-4" onClick={() => navigate('/SOLE_TRADER/order')}>
-            Перейти к оформлению
-          </Button>
+            <div className="flex justify-between items-center">
+              <span className="text-xl font-bold">Итого:</span>
+              <span className="text-xl font-bold">{total} ₽</span>
+            </div>
+
+            <Button className="w-full text-lg mt-2" onClick={handleProceed}>
+              Перейти к оформлению
+            </Button>
+          </div>
         </div>
       )}
     </DashboardLayout>
