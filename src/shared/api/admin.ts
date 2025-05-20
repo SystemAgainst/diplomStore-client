@@ -4,7 +4,7 @@ export const banUserByLogin = (login: string) =>
   api.postWithoutBody(`admin/ban/${login}`);
 
 export const unBanUserByLogin = (login: string) =>
-  api.postWithoutBody(`admin/unBan/${login}`);
+  api.postWithoutBody(`admin/anBan/${login}`);
 
 export const getAllSuppliers = () =>
   api.get('admin/suppliers');
