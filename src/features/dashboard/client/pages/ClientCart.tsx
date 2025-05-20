@@ -25,6 +25,7 @@ export const ClientCart = () => {
 
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const loadCart = async () => {
     try {
@@ -47,11 +48,14 @@ export const ClientCart = () => {
     }
 
     try {
+      setLoading(true);
       await createOrderAndProceed({ address, city });
       navigate('/SOLE_TRADER/order');
     } catch (e) {
       console.error(e);
       toast.error('Не удалось оформить заказ');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -122,8 +126,12 @@ export const ClientCart = () => {
               <span className="text-xl font-bold">{total} ₽</span>
             </div>
 
-            <Button className="w-full text-lg mt-2" onClick={handleProceed}>
-              Перейти к оформлению
+            <Button
+              className="w-full text-lg mt-2"
+              onClick={handleProceed}
+              disabled={loading}
+            >
+              {loading ? 'Оформляем...' : 'Перейти к оформлению'}
             </Button>
           </div>
         </div>
