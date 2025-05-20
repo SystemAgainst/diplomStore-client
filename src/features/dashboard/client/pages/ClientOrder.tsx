@@ -9,6 +9,15 @@ import { Button } from '@/shared/ui/button';
 import type { OrderClientDtoResponse } from '@/shared/api/dto/client.ts';
 import { OrderStatus } from '@/shared/api/dto/order.ts';
 
+/**
+ * TODO
+ * [] - fix detail of order  (client and supplier)
+ * [] - download pdf-file with order's detail after payment button clicking (user)
+ * [] - page with canceled and payed orders
+ * [] - filtered orders by status for suppliers
+ * [] - handle status "DELIVERED". He is wanished after getting this status (supplier role)
+ * */
+
 export const ClientOrder = () => {
   const menu = useRoleMenu();
   const [orders, setOrders] = useState<OrderClientDtoResponse[]>([]);
