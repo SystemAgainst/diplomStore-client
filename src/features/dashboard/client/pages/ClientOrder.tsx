@@ -1,13 +1,19 @@
 import { useEffect, useState } from 'react';
 import { DashboardLayout } from '@/features/dashboard/DashboardLayout';
 import { useRoleMenu } from '@/shared/hooks/useRoleMenu';
-import { getAllClientOrders, orderPayedByClient, orderCanceledByClient } from '@/shared/api/clientOrder';
+import {
+  getAllClientOrders,
+  orderPayedByClient,
+  orderCanceledByClient,
+} from '@/shared/api/clientOrder';
 import { Card } from '@/shared/ui/card';
 import { toast } from 'sonner';
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
 import type { OrderClientDtoResponse } from '@/shared/api/dto/client.ts';
-import { OrderStatus } from '@/shared/api/dto/order.ts';
+import { OrderStatus, OrderStatusLabels } from '@/shared/api/dto/order.ts';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/shared/ui/tabs';
+
 
 /**
  * TODO
@@ -17,11 +23,11 @@ import { OrderStatus } from '@/shared/api/dto/order.ts';
  * [x] - filtered orders by status for suppliers
  * [] - handle status "DELIVERED". He is wanished after getting this status (supplier role)
  * */
-
 export const ClientOrder = () => {
   const menu = useRoleMenu();
   const [orders, setOrders] = useState<OrderClientDtoResponse[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState<OrderStatus | 'ALL'>('ALL');
 
   const fetchOrders = async () => {
     try {
@@ -71,7 +77,7 @@ export const ClientOrder = () => {
           </p>
         </div>
         <div className="text-right">
-          <Badge>{order.status}</Badge>
+          <Badge>{OrderStatusLabels[order.status]}</Badge>
           <p className="text-lg font-bold">{order.totalCost} ₽</p>
         </div>
       </div>
@@ -106,7 +112,6 @@ export const ClientOrder = () => {
 
       <div className="flex justify-end gap-2 pt-4">
         <Button onClick={() => handlePay(order.id)}>Оплатить</Button>
-
         <Button
           variant="destructive"
           disabled={order.status !== OrderStatus.DELIVERED}
@@ -118,19 +123,49 @@ export const ClientOrder = () => {
     </Card>
   );
 
+  const filteredOrders =
+    activeTab === 'ALL' ? orders : orders.filter((o) => o.status === activeTab);
+
+  const statuses: (OrderStatus | 'ALL')[] = [
+    'ALL',
+    'PENDING',
+    'CREATED',
+    'CONFIRMED',
+    'SHIPPED',
+    'DELIVERED',
+    'PAID',
+    'CANCELLED',
+  ];
+
   return (
     <DashboardLayout roleBasedMenuSlot={menu}>
       <h1 className="text-2xl font-bold mb-6">Мои заказы</h1>
       {loading ? (
         <Card className="p-6 text-center">Загрузка заказов...</Card>
-      ) : orders.length ? (
-        <div className="space-y-6 max-h-[900px] overflow-y-auto pr-2">
-          {orders.map(renderOrder)}
-        </div>
-      ) : (
+      ) : orders.length === 0 ? (
         <Card className="p-6 text-center text-muted-foreground">
           У вас пока нет заказов.
         </Card>
+      ) : (
+        <Tabs defaultValue="ALL" value={activeTab} onValueChange={(v) => setActiveTab(v as OrderStatus | 'ALL')}>
+          <TabsList className="overflow-x-auto max-w-full mb-4">
+            {statuses.map((status) => (
+              <TabsTrigger key={status} value={status}>
+                {OrderStatusLabels[status]}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+
+          <TabsContent value={activeTab} className="space-y-6 max-h-[900px] overflow-y-auto pr-2">
+            {filteredOrders.length > 0 ? (
+              filteredOrders.map(renderOrder)
+            ) : (
+              <Card className="p-6 text-center text-muted-foreground">
+                Нет заказов в этом статусе
+              </Card>
+            )}
+          </TabsContent>
+        </Tabs>
       )}
     </DashboardLayout>
   );

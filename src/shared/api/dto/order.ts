@@ -23,6 +23,17 @@ export const OrderStatus = {
 
 export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus];
 
+export const OrderStatusLabels: Record<OrderStatus | 'ALL', string> = {
+  ALL: 'Все',
+  PENDING: 'В ожидании',
+  CREATED: 'Создан',
+  CONFIRMED: 'Подтверждён',
+  SHIPPED: 'В пути',
+  DELIVERED: 'Доставлен',
+  PAID: 'Оплачен',
+  CANCELLED: 'Отменён',
+};
+
 export interface OrderStatusDtoResponse {
   id: number;
   status: OrderStatus;
