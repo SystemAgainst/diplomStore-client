@@ -3,6 +3,9 @@ import api from './http';
 export const getSupplierAllProducts = () =>
   api.get('supplier/my/products');
 
+export const getSupplierAllOrders = () =>
+  api.get('supplier/my/orders');
+
 export const orderShipped = (id: number) =>
   api.postWithoutBody(`order/shipped/${id}`);
 

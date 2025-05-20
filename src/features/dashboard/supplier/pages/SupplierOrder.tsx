@@ -6,25 +6,23 @@ import { Card } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import { Separator } from '@/shared/ui/separator';
 import {
-  getSupplierAllProducts,
+  getSupplierAllOrders,
   orderDelivered,
   orderShipped,
   orderCanceled,
   orderConfirmed,
 } from '@/shared/api/supplier';
-import {
-  type OrderClientDtoResponse,
-  OrderStatus,
+import { OrderStatus, type OrderStatusDtoResponse,
 } from '@/shared/api/dto/order';
 
 export const SupplierOrder = () => {
   const menu = useRoleMenu();
-  const [orders, setOrders] = useState<OrderClientDtoResponse[]>([]);
+  const [orders, setOrders] = useState<OrderStatusDtoResponse[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchOrders = async () => {
     try {
-      const res = await getSupplierAllProducts();
+      const res = await getSupplierAllOrders();
       setOrders(res.data);
     } catch (error) {
       console.error('Ошибка при загрузке заказов', error);
@@ -64,7 +62,7 @@ export const SupplierOrder = () => {
     }
   };
 
-  const renderOrderCard = (order: OrderClientDtoResponse) => (
+  const renderOrderCard = (order: OrderStatusDtoResponse) => (
     <Card key={order.id} className="p-4 space-y-2">
       <div className="flex justify-between">
         <div>

@@ -23,8 +23,7 @@ export const OrderStatus = {
 
 export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus];
 
-// Список заказов для клиента
-export interface OrderClientDtoResponse {
+export interface OrderStatusDtoResponse {
   id: number;
   status: OrderStatus;
   totalCost: number;
