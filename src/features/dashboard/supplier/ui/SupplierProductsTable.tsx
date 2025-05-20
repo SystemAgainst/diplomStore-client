@@ -116,10 +116,14 @@ export const SupplierProductsTable = ({ refreshToken }: { refreshToken: number }
   const [editRowId, setEditRowId] = useState<number | null>(null);
   const [editedRow, setEditedRow] = useState<Partial<SupplierProductDto> | null>(null);
 
-  const fetchProducts = () => {
-    getSupplierAllProducts().then((res) => {
+  const fetchProducts = async () => {
+    try {
+      const res = await getSupplierAllProducts();
+      console.log("getSupplierAllProducts", res.data);
       setData(res.data);
-    });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
