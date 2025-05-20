@@ -1,8 +1,7 @@
 export const menuConfig = {
   "SUPPLIER": [
-    // { label: 'Главная', path: '/SUPPLIER/me' },
-    { label: 'Мои продукты', path: '/SUPPLIER/products' },
-    { label: 'Заявка на покупку', path: '/SUPPLIER/orders' },
+    { label: 'Мои продукты', path: '/SUPPLIER/me' },
+    { label: 'Заявка на покупку', path: '/SUPPLIER/order' },
   ],
   "SOLE_TRADER": [
     { label: 'Главная', path: 'SOLE_TRADER/me' },

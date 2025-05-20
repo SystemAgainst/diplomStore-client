@@ -1,17 +1,16 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { LoginPage } from '@/features/auth/LoginPage';
 import { ClientDashboard } from '@/features/dashboard/client/ClientDashboard.tsx';
-import { SupplierDashboard } from '@/features/dashboard/supplier/SupplierDashboard.tsx';
 import { AdminDashboard } from '@/features/dashboard/admin/AdminDashboard.tsx';
 import { useAuthStore } from '@/features/auth/useAuthStore';
 import { RegisterPage } from '@/features/auth/RegisterPage';
-import { SupplierProductsPage } from '@/features/dashboard/supplier/pages/SupplierProductsPage.tsx';
-import { SupplierOrder } from '@/features/dashboard/supplier/pages/SupplierOrder.tsx';
+import { SupplierOrder } from '@/features/dashboard/supplier/pages/SupplierOrder';
 import { ClientCart } from '@/features/dashboard/client/pages/ClientCart.tsx';
 import { ClientOrder } from '@/features/dashboard/client/pages/ClientOrder.tsx';
 import { AdminClientsList } from '@/features/dashboard/admin/pages/AdminClientsList.tsx';
 import { AdminSuppliersList } from '@/features/dashboard/admin/pages/AdminSuppliersList.tsx';
 import { AdminProductsList } from '@/features/dashboard/admin/pages/AdminProductsList.tsx';
+import { SupplierProductsList } from '@/features/dashboard/supplier/pages/SupplierProductsList.tsx';
 
 
 export const AppRoutes = () => {
@@ -30,8 +29,7 @@ export const AppRoutes = () => {
     return (
       <Routes>
         {/*SUPPLIER*/}
-        <Route path="/SUPPLIER/me" element={<SupplierDashboard />} />
-          <Route path="/SUPPLIER/products" element={<SupplierProductsPage />} />
+        <Route path="/SUPPLIER/me" element={<SupplierProductsList />} />
           <Route path="/SUPPLIER/order" element={<SupplierOrder />} />
 
         {/*CLIENT*/}

@@ -4,7 +4,7 @@ import { SupplierProductsTable } from '@/features/dashboard/supplier/ui/Supplier
 import { CreateProductModal } from '@/features/dashboard/supplier/ui/SupplierProductAdd.tsx';
 import { useState } from 'react';
 
-export const SupplierProductsPage = () => {
+export const SupplierProductsList = () => {
   const menu = useRoleMenu();
   const [refreshToken, setRefreshToken] = useState(0);
 
