@@ -12,6 +12,8 @@ export const getAllClientOrders = () =>
 export const checkoutOrder = () =>
   api.get('order/checkout');
 
-// Оплатить заказ по ID
-export const payOrder = (id: number) =>
+export const orderPayedByClient = (id: number) =>
   api.postWithoutBody(`order/pay/${id}`);
+
+export const orderCanceledByClient = (id: number) =>
+  api.postWithoutBody(`order/cancelled/${id}`);
