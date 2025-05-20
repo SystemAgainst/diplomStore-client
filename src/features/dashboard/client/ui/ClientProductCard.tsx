@@ -5,6 +5,7 @@ import { Dialog, DialogContent, DialogTrigger } from '@/shared/ui/dialog';
 import { useState } from 'react';
 import { getProductById } from '@/shared/api/product.ts';
 import { useCartStore } from '@/features/cart/useCartStore';
+import { cartAdd } from '@/shared/api/cart.ts';
 
 interface ClientProductCardProps {
   product: MainDtoResponse;
@@ -34,14 +35,21 @@ export const ClientProductCard = ({ product }: ClientProductCardProps) => {
   const quantityInCart = cart.items.find((item) =>
     item.productId === product.id)?.quantity || 0;
 
-  const handleAddToCart = () => {
-    cart.addItem({
-      productId: product.id,
-      title: product.title,
-      price: product.price,
-      image: product.imageUrl,
-    });
+  const handleAddToCart = async () => {
+    try {
+      await cartAdd({ productId: product.id, quantity: 1 });
+
+      cart.addItem({
+        productId: product.id,
+        title: product.title,
+        price: product.price,
+        image: product.imageUrl,
+      });
+    } catch (error) {
+      console.error('Ошибка при добавлении товара в корзину:', error);
+    }
   };
+
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>

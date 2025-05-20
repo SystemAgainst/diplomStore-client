@@ -1,21 +1,16 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-
-export interface CartItem {
-  productId: number;
-  title: string;
-  price: number;
-  image?: string;
-  quantity: number;
-}
+import { cartIncreaseItem, cartDecreaseItem } from '@/shared/api/cart'; // предполагается, что они есть
+import type { CartItemFromApi } from '@/shared/api/dto/cart';
 
 interface CartState {
-  items: CartItem[];
+  items: CartItemFromApi[];
   totalPrice: number;
-  addItem: (item: Omit<CartItem, 'quantity'>, quantity?: number) => void;
-  removeItem: (productId: number) => void;
-  increaseQuantity: (productId: number) => void;
-  decreaseQuantity: (productId: number) => void;
+  hydrateCart: (items: CartItemFromApi[]) => void;
+  addItem: (item: Omit<CartItemFromApi, 'quantity' | 'total' | 'id'>, quantity?: number) => void;
+  removeItem: (cartItemId: number) => void;
+  increaseQuantity: (cartItemId: number) => Promise<void>;
+  decreaseQuantity: (cartItemId: number) => Promise<void>;
   clearCart: () => void;
   getQuantity: (productId: number) => number;
 }
@@ -25,6 +20,13 @@ export const useCartStore = create<CartState>()(
     (set, get) => ({
       items: [],
       totalPrice: 0,
+
+      hydrateCart: (items) => {
+        set({
+          items,
+          totalPrice: items.reduce((sum, i) => sum + i.total, 0),
+        });
+      },
 
       addItem: (item, quantity = 1) => {
         const items = get().items;
@@ -36,7 +38,12 @@ export const useCartStore = create<CartState>()(
             i.productId === item.productId ? { ...i, quantity: i.quantity + quantity } : i
           );
         } else {
-          updatedItems = [...items, { ...item, quantity }];
+          updatedItems = [...items, {
+            ...item,
+            quantity,
+            id: Math.random(), // временный id, если добавляется локально
+            total: item.price * quantity,
+          }];
         }
 
         set({
@@ -45,41 +52,60 @@ export const useCartStore = create<CartState>()(
         });
       },
 
-      removeItem: (productId) => {
-        const updatedItems = get().items.filter((i) => i.productId !== productId);
+      removeItem: (cartItemId) => {
+        const updatedItems = get().items.filter((i) => i.id !== cartItemId);
         set({
           items: updatedItems,
           totalPrice: updatedItems.reduce((sum, i) => sum + i.price * i.quantity, 0),
         });
       },
 
-      increaseQuantity: (productId) => {
-        const updatedItems = get().items.map((i) =>
-          i.productId === productId ? { ...i, quantity: i.quantity + 1 } : i
-        );
-        set({
-          items: updatedItems,
-          totalPrice: updatedItems.reduce((sum, i) => sum + i.price * i.quantity, 0),
-        });
+      increaseQuantity: async (cartItemId) => {
+        try {
+          await cartIncreaseItem({ id: cartItemId, quantity: 1 });
+          const updatedItems = get().items.map((i) =>
+            i.id === cartItemId ? {
+              ...i,
+              quantity: i.quantity + 1,
+              total: (i.quantity + 1) * i.price,
+            } : i
+          );
+          set({
+            items: updatedItems,
+            totalPrice: updatedItems.reduce((sum, i) => sum + i.total, 0),
+          });
+        } catch (e) {
+          console.error('Ошибка при увеличении:', e);
+        }
       },
 
-      decreaseQuantity: (productId) => {
-        const current = get().items.find((i) => i.productId === productId);
+      decreaseQuantity: async (cartItemId) => {
+        const current = get().items.find((i) => i.id === cartItemId);
         if (!current) return;
 
-        let updatedItems;
-        if (current.quantity === 1) {
-          updatedItems = get().items.filter((i) => i.productId !== productId);
-        } else {
-          updatedItems = get().items.map((i) =>
-            i.productId === productId ? { ...i, quantity: i.quantity - 1 } : i
-          );
-        }
+        try {
+          await cartDecreaseItem({ id: cartItemId, quantity: 1 });
 
-        set({
-          items: updatedItems,
-          totalPrice: updatedItems.reduce((sum, i) => sum + i.price * i.quantity, 0),
-        });
+          let updatedItems;
+          if (current.quantity === 1) {
+            updatedItems = get().items.filter((i) => i.id !== cartItemId);
+          } else {
+            updatedItems = get().items.map((i) =>
+              i.id === cartItemId ? {
+                ...i,
+                quantity: i.quantity - 1,
+                total: (i.quantity - 1) * i.price,
+              } : i
+            );
+          }
+
+          set({
+            items: updatedItems,
+            totalPrice: updatedItems.reduce((sum, i) => sum + i.total, 0),
+          });
+        } catch (e) {
+          console.error('Ошибка при уменьшении:', e);
+        }
       },
 
       clearCart: () => set({ items: [], totalPrice: 0 }),
