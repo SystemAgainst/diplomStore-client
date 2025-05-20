@@ -49,11 +49,11 @@ const columnsConfig = (
       editRowId === row.original.id ? (
         <Input
           type="number"
-          value={editedRow?.sellingPrice ?? ''}
-          onChange={(e) => onChangeField('sellingPrice', Number(e.target.value))}
+          value={editedRow?.price ?? ''}
+          onChange={(e) => onChangeField('price', Number(e.target.value))}
         />
       ) : (
-        row.original.sellingPrice
+        row.original.price
       ),
   },
   {
@@ -63,11 +63,11 @@ const columnsConfig = (
       editRowId === row.original.id ? (
         <Input
           type="number"
-          value={editedRow?.price ?? ''}
-          onChange={(e) => onChangeField('price', Number(e.target.value))}
+          value={editedRow?.sellingPrice ?? ''}
+          onChange={(e) => onChangeField('sellingPrice', Number(e.target.value))}
         />
       ) : (
-        row.original.price
+        row.original.sellingPrice
       ),
   },
   {
