@@ -1,7 +1,6 @@
 import api from './http';
 import type { ClientLocation } from '@/shared/api/dto/client.ts';
 
-// Создать заказ (оформление корзины)
 export const createOrder = (data: ClientLocation) =>
   api.post('order/create', data);
 

@@ -2,10 +2,14 @@ import type { Role } from '@/shared/const';
 
 export interface SupplierDto {
   id: number;
-  name: string;
+  login: string;
+  fio: string;
   email: string;
   phoneNumber: string;
-  telegram: string;
+  loginTelegram: string;
+  chatId: string;
+  role: Role;
+  active: boolean;
 }
 
 export interface SupplierProductDto {

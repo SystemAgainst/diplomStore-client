@@ -1,6 +1,6 @@
 import { Card } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
-import type { MainDtoResponse, ProductInfoMainDtoResponse } from '@/shared/api/dto/product';
+import type { MainDtoResponse as ProductDtoResponse } from '@/shared/api/dto/product';
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/shared/ui/dialog';
 import { useState } from 'react';
 import { getProductById } from '@/shared/api/product.ts';
@@ -8,11 +8,11 @@ import { useCartStore } from '@/features/cart/useCartStore';
 import { cartAdd } from '@/shared/api/cart.ts';
 
 interface ClientProductCardProps {
-  product: MainDtoResponse;
+  product: ProductDtoResponse;
 }
 
 export const ClientProductCard = ({ product }: ClientProductCardProps) => {
-  const [details, setDetails] = useState<ProductInfoMainDtoResponse | null>(null);
+  const [details, setDetails] = useState<ProductDtoResponse | null>(null);
   const [open, setOpen] = useState(false);
   const cart = useCartStore();
 
@@ -75,17 +75,21 @@ export const ClientProductCard = ({ product }: ClientProductCardProps) => {
         {details ? (
           <div className="space-y-4">
             <img
-              src={product.imageUrl || '/mock-product.jpg'}
-              alt={details.title}
+              src={details.imageUrl || product.imageUrl || '/mock-product.jpg'}
+              alt={details.title || product.title}
               className="w-full h-64 object-cover rounded"
               onError={(e) => ((e.target as HTMLImageElement).src = '/mock-product.jpg')}
             />
-            <p><strong>Цена:</strong> {details.price} ₽</p>
+            {new Intl.NumberFormat('ru-RU').format(details.sellingPrice)} ₽
             <p><strong>Остаток на складе:</strong> {details.quantity} шт.</p>
-            <p><strong>Продавец:</strong> {details.supplierLogin}</p>
+            <p><strong>Продавец:</strong> {details.supplier.login}</p>
             <Button className="w-full" onClick={handleAddToCart}>
-              {quantityInCart > 0 ? `В корзине: ${quantityInCart}` : 'Добавить в корзину'}
-            </Button>          </div>
+              {quantityInCart > 0
+                ? `В корзине: ${quantityInCart}`
+                : 'Добавить в корзину'
+              }
+            </Button>
+          </div>
         ) : (
           <p>Загрузка...</p>
         )}
