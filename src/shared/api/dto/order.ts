@@ -18,6 +18,7 @@ export const OrderStatus = {
   SHIPPED: 'SHIPPED',
   DELIVERED: 'DELIVERED',
   PAID: 'PAID',
+  PENDING: "PENDING",
 } as const;
 
 export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus];

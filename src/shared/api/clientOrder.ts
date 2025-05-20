@@ -15,10 +15,14 @@ export const checkoutOrder = () =>
 export const payOrder = (id: number) =>
   api.postWithoutBody(`order/pay/${id}`);
 
-// Подтвердить доставку заказа
-export const confirmDelivered = (id: number) =>
+export const orderShipped = (id: number) =>
+  api.postWithoutBody(`order/shipped/${id}`);
+
+export const orderDelivered = (id: number) =>
   api.postWithoutBody(`order/delivered/${id}`);
 
-// Отменить заказ
-export const cancelOrder = (id: number) =>
+export const orderCanceled = (id: number) =>
   api.postWithoutBody(`order/cancelled/${id}`);
+
+export const orderConfirmed = (id: number) =>
+  api.postWithoutBody(`order/confirmed/${id}`);
