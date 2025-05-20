@@ -5,7 +5,7 @@ import { useCartStore } from '@/features/cart/useCartStore';
 import { Card } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import { Separator } from '@/shared/ui/separator';
-import { Input } from '@/shared/ui/input'; // добавь импорт input
+import { Input } from '@/shared/ui/input';
 import { Trash2, Minus, Plus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { getClientCart } from '@/shared/api/cart';
