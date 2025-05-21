@@ -38,9 +38,15 @@ export const ClientOrder = () => {
 
   const handlePay = async (orderId: number) => {
     try {
-      await orderPayedByClient(orderId);
-      toast.success(`Заказ #${orderId} оплачен`);
-      await fetchOrders();
+      console.log("orderId", orderId);
+      const res = await orderPayedByClient(orderId);
+      const url = res.data;
+
+      if (url) {
+        window.location.href = url;
+      } else {
+        toast.error('Ошибка: не получена ссылка на оплату');
+      }
     } catch (e) {
       toast.error('Ошибка при оплате заказа');
       console.error(e);

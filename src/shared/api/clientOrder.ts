@@ -11,7 +11,7 @@ export const validateCartBeforeCheckout = () =>
   api.get('order/checkout');
 
 export const orderPayedByClient = (id: number) =>
-  api.postWithoutBody(`order/pay/${id}`);
+  api.postWithoutBody(`order/init/${id}`);
 
 export const orderCanceledByClient = (id: number) =>
   api.postWithoutBody(`order/cancelled/${id}`);
