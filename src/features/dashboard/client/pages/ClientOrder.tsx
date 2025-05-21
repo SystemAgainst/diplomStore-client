@@ -9,24 +9,16 @@ import {
 import { Card } from '@/shared/ui/card';
 import { toast } from 'sonner';
 import type { OrderClientDtoResponse } from '@/shared/api/dto/client.ts';
-import { OrderStatus, OrderStatusLabels } from '@/shared/api/dto/order.ts';
+import { OrderStatus, OrderStatusLabels, type TabFilter } from '@/shared/api/dto/order.ts';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/shared/ui/tabs';
 import { OrderCard } from '@/features/order/OrderCard.tsx';
 
 
-/**
- * TODO
- * [] - fix detail of order  (client and supplier)
- * [] - download pdf-file with order's detail after payment button clicking (user)
- * [] - page with canceled and payed orders
- * [x] - filtered orders by status for suppliers
- * [] - handle status "DELIVERED". He is wanished after getting this status (supplier role)
- * */
 export const ClientOrder = () => {
   const menu = useRoleMenu();
   const [orders, setOrders] = useState<OrderClientDtoResponse[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<OrderStatus | 'ALL'>('ALL');
+  const [activeTab, setActiveTab] = useState<TabFilter>('PENDING_GROUP');
 
   const fetchOrders = async () => {
     try {
@@ -66,19 +58,32 @@ export const ClientOrder = () => {
     }
   };
 
-  const filteredOrders =
-    activeTab === 'ALL' ? orders : orders.filter((o) => o.status === activeTab);
+  const filterOrdersByTab = (tab: TabFilter) => {
+    if (tab === 'ALL') return orders;
 
-  const statuses: (OrderStatus | 'ALL')[] = [
-    'ALL',
-    'PENDING',
-    'CREATED',
-    'CONFIRMED',
-    'SHIPPED',
-    'DELIVERED',
-    'PAID',
-    'CANCELLED',
+    const pendingGroupStatuses: OrderStatus[] = [
+      OrderStatus.PENDING,
+      OrderStatus.CREATED,
+      OrderStatus.CONFIRMED,
+    ];
+
+    if (tab === 'PENDING_GROUP') {
+      return orders.filter((o) => pendingGroupStatuses.includes(o.status));
+    }
+
+    return orders.filter((o) => o.status === tab);
+  };
+
+  const tabs: { value: TabFilter; label: string }[] = [
+    { value: 'PENDING_GROUP', label: 'В ожидании' },
+    { value: OrderStatus.SHIPPED, label: OrderStatusLabels.SHIPPED },
+    { value: OrderStatus.DELIVERED, label: OrderStatusLabels.DELIVERED },
+    { value: OrderStatus.PAID, label: OrderStatusLabels.PAID },
+    { value: OrderStatus.CANCELLED, label: OrderStatusLabels.CANCELLED },
+    { value: 'ALL', label: 'История заказов' },
   ];
+
+  const filteredOrders = filterOrdersByTab(activeTab);
 
   return (
     <DashboardLayout roleBasedMenuSlot={menu}>
@@ -90,11 +95,15 @@ export const ClientOrder = () => {
           У вас пока нет заказов.
         </Card>
       ) : (
-        <Tabs defaultValue="ALL" value={activeTab} onValueChange={(v) => setActiveTab(v as OrderStatus | 'ALL')}>
+        <Tabs
+          defaultValue="PENDING_GROUP"
+          value={activeTab}
+          onValueChange={(value: string) => setActiveTab(value as TabFilter)}
+        >
           <TabsList className="overflow-x-auto max-w-full mb-4">
-            {statuses.map((status) => (
-              <TabsTrigger key={status} value={status}>
-                {OrderStatusLabels[status]}
+            {tabs.map((tab) => (
+              <TabsTrigger key={tab.value} value={tab.value}>
+                {tab.label}
               </TabsTrigger>
             ))}
           </TabsList>
@@ -107,6 +116,7 @@ export const ClientOrder = () => {
                   order={order}
                   onPay={handlePay}
                   onCancel={handleCancel}
+                  showActions={activeTab === OrderStatus.DELIVERED}
                 />
               ))
             ) : (
@@ -115,7 +125,6 @@ export const ClientOrder = () => {
               </Card>
             )}
           </TabsContent>
-
         </Tabs>
       )}
     </DashboardLayout>

@@ -8,9 +8,10 @@ interface OrderCardProps {
   order: OrderClientDtoResponse;
   onPay: (orderId: number) => void;
   onCancel: (orderId: number) => void;
+  showActions?: boolean;
 }
 
-export const OrderCard = ({ order, onPay, onCancel }: OrderCardProps) => {
+export const OrderCard = ({ order, onPay, onCancel, showActions }: OrderCardProps) => {
   return (
     <Card className="p-4 space-y-4">
       <div className="flex justify-between items-center">
@@ -54,16 +55,18 @@ export const OrderCard = ({ order, onPay, onCancel }: OrderCardProps) => {
         <p className="text-sm text-muted-foreground">Нет данных о товарах</p>
       )}
 
-      <div className="flex justify-end gap-2 pt-4">
-        <Button onClick={() => onPay(order.id)}>Оплатить</Button>
-        <Button
-          variant="destructive"
-          disabled={order.status !== OrderStatus.DELIVERED}
-          onClick={() => onCancel(order.id)}
-        >
-          Отменить
-        </Button>
-      </div>
+      {showActions && (
+        <div className="flex justify-end gap-2 pt-4">
+          <Button onClick={() => onPay(order.id)}>Оплатить</Button>
+          <Button
+            variant="destructive"
+            disabled={order.status !== OrderStatus.DELIVERED}
+            onClick={() => onCancel(order.id)}
+          >
+            Отменить
+          </Button>
+        </div>
+      )}
     </Card>
   );
 };

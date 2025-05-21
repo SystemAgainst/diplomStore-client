@@ -24,7 +24,7 @@ export const OrderStatus = {
 export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus];
 
 export const OrderStatusLabels: Record<OrderStatus | 'ALL', string> = {
-  ALL: 'Все',
+  ALL: 'История заказов',
   PENDING: 'В ожидании',
   CREATED: 'Создан',
   CONFIRMED: 'Подтверждён',
@@ -33,6 +33,8 @@ export const OrderStatusLabels: Record<OrderStatus | 'ALL', string> = {
   PAID: 'Оплачен',
   CANCELLED: 'Отменён',
 };
+
+export type TabFilter = OrderStatus | 'ALL' | 'PENDING_GROUP';
 
 export interface OrderStatusDtoResponse {
   id: number;
