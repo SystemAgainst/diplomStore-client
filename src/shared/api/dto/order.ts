@@ -12,7 +12,6 @@ export interface CheckoutItem {
 }
 
 export const OrderStatus = {
-  CREATED: 'CREATED',
   CONFIRMED: 'CONFIRMED',
   CANCELLED: 'CANCELLED',
   SHIPPED: 'SHIPPED',
@@ -26,7 +25,6 @@ export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus];
 export const OrderStatusLabels: Record<OrderStatus | 'ALL', string> = {
   ALL: 'История заказов',
   PENDING: 'В ожидании',
-  CREATED: 'Создан',
   CONFIRMED: 'Подтверждён',
   SHIPPED: 'В пути',
   DELIVERED: 'Доставлен',

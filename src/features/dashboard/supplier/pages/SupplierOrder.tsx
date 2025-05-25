@@ -137,7 +137,6 @@ export const SupplierOrder = () => {
   const statuses: (OrderStatus | 'ALL')[] = [
     'ALL',
     'PENDING',
-    'CREATED',
     'CONFIRMED',
     'SHIPPED',
     'DELIVERED',
