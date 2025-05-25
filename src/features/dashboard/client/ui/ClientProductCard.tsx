@@ -7,6 +7,7 @@ import { getProductById } from '@/shared/api/product.ts';
 import { useCartStore } from '@/features/cart/useCartStore';
 import { cartAdd } from '@/shared/api/cart.ts';
 import { API_URL } from '@/shared/const';
+import { useNavigate } from 'react-router-dom';
 
 interface ClientProductCardProps {
   product: ProductDtoResponse;
@@ -16,6 +17,7 @@ export const ClientProductCard = ({ product }: ClientProductCardProps) => {
   const [details, setDetails] = useState<ProductDtoResponse | null>(null);
   const [open, setOpen] = useState(false);
   const cart = useCartStore();
+  const navigate = useNavigate();
 
   const fetchDetails = async () => {
     try {
@@ -55,6 +57,10 @@ export const ClientProductCard = ({ product }: ClientProductCardProps) => {
     ? details.imageUrl
     : `${API_URL}${details?.imageUrl || ''}`;
 
+  const handleDetailSupplierClick = (login: string) => {
+    navigate(`/SOLE_TRADER/supplier-info/${login}`);
+  };
+
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <Card className="p-4 flex flex-col gap-4">
@@ -86,7 +92,15 @@ export const ClientProductCard = ({ product }: ClientProductCardProps) => {
             />
             <p><strong>Цена:</strong> {new Intl.NumberFormat('ru-RU').format(details.price)} ₽</p>
             <p><strong>Остаток на складе:</strong> {details.quantity} шт.</p>
-            <p><strong>Продавец:</strong> {details.supplier.login}</p>
+            <p>
+              <strong>Продавец:</strong>
+              <Button
+                variant="ghost"
+                onClick={() => handleDetailSupplierClick(details.supplier.login)}
+              >
+                {details.supplier.login}
+              </Button>
+            </p>
             <Button className="w-full" onClick={handleAddToCart}>
               {quantityInCart > 0
                 ? `В корзине: ${quantityInCart}`

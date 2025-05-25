@@ -11,6 +11,7 @@ import { AdminClientsList } from '@/features/dashboard/admin/pages/AdminClientsL
 import { AdminSuppliersList } from '@/features/dashboard/admin/pages/AdminSuppliersList.tsx';
 import { AdminProductsList } from '@/features/dashboard/admin/pages/AdminProductsList.tsx';
 import { SupplierProductsList } from '@/features/dashboard/supplier/pages/SupplierProductsList.tsx';
+import SupplierInfo from '@/features/dashboard/client/pages/SupplierInfo.tsx';
 
 
 export const AppRoutes = () => {
@@ -35,7 +36,8 @@ export const AppRoutes = () => {
         {/*CLIENT*/}
         <Route path="/SOLE_TRADER/me" element={<ClientDashboard />} />
         <Route path="/SOLE_TRADER/cart" element={<ClientCart />} />
-        <Route path="/SOLE_TRADER/order" element={<ClientOrder />} />
+          <Route path="/SOLE_TRADER/order" element={<ClientOrder />} />
+          <Route path="/SOLE_TRADER/supplier-info/:login" element={<SupplierInfo />} />
 
         {/*ADMIN*/}
         <Route path="/ADMIN/me" element={<AdminDashboard />} />
