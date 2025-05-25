@@ -68,37 +68,62 @@ export const SupplierOrder = () => {
   };
 
   const renderOrderCard = (order: OrderStatusDtoResponse) => (
-    <Card key={order.id} className="p-4 space-y-2">
-      <div className="flex justify-between">
+    <Card className="p-4 space-y-4">
+      <div className="flex justify-between items-center">
         <div>
-          <p className="font-semibold">Заказ #{order.id}</p>
-          <p className="text-muted-foreground">
+          <p className="text-lg font-bold">Заказ №{order.id}</p>
+          <p className="text-sm text-muted-foreground">
             Дата: {new Date(order.localDateTime).toLocaleString('ru-RU')}
           </p>
+          <p className="text-sm text-muted-foreground">Клиент: {order.loginClient}</p>
         </div>
-        <p className="font-bold">Сумма: {order.totalCost} ₽</p>
+        <div className="text-right space-y-1 text-sm">
+          <p><strong>Адрес:</strong> {order.address}</p>
+          <p><strong>Город:</strong> {order.city}</p>
+          <p><strong>Статус:</strong> {OrderStatusLabels[order.status]}</p>
+        </div>
       </div>
+
       <Separator />
-      <div className="flex gap-2">
+
+      <div className="grid grid-cols-2 gap-4 text-sm">
+        <div>
+          <p className="font-semibold text-muted-foreground">Общая стоимость товаров:</p>
+          <p className="text-base">{order.totalCost.toLocaleString('ru-RU')} ₽</p>
+        </div>
+        <div>
+          <p className="font-semibold text-muted-foreground">Общая себестоимость:</p>
+          <p className="text-base">{order.totalPrice.toLocaleString('ru-RU')} ₽</p>
+        </div>
+        <div className="space-y-1">
+          <p className="font-semibold text-muted-foreground">
+            {order.profit >= 0 ? 'Прибыль:' : 'Убыток:'}
+          </p>
+          <p
+            className={`text-base font-bold ${
+              order.profit >= 0 ? 'text-green-600' : 'text-red-600'
+            }`}
+          >
+            {order.profit.toLocaleString('ru-RU')} ₽
+          </p>
+        </div>
+      </div>
+
+      <Separator />
+
+      <div className="flex gap-2 flex-wrap">
         {order.status === OrderStatus.PENDING && (
           <>
             <Button onClick={() => handleAction(order.id, 'confirm')}>Принять</Button>
-            <Button
-              variant="destructive"
-              onClick={() => handleAction(order.id, 'cancel')}
-            >
-              Отклонить
-            </Button>
+            <Button variant="destructive" onClick={() => handleAction(order.id, 'cancel')}>Отклонить</Button>
           </>
         )}
-
         {order.status === OrderStatus.CONFIRMED && (
           <>
             <Button onClick={() => handleAction(order.id, 'ship')}>В путь</Button>
             <Button disabled>Доставлено</Button>
           </>
         )}
-
         {order.status === OrderStatus.SHIPPED && (
           <>
             <Button disabled>В путь</Button>
