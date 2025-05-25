@@ -86,7 +86,7 @@ export const SupplierOrder = () => {
 
       <Separator />
 
-      <div className="grid grid-cols-2 gap-4 text-sm">
+      <div className="grid grid-cols-3 gap-4 text-sm">
         <div>
           <p className="font-semibold text-muted-foreground">Общая стоимость товаров:</p>
           <p className="text-base">{order.totalCost.toLocaleString('ru-RU')} ₽</p>
