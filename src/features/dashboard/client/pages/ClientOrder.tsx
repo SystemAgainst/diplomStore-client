@@ -69,8 +69,6 @@ export const ClientOrder = () => {
 
     const pendingGroupStatuses: OrderStatus[] = [
       OrderStatus.PENDING,
-      OrderStatus.CREATED,
-      OrderStatus.CONFIRMED,
     ];
 
     if (tab === 'PENDING_GROUP') {
