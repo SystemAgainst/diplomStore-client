@@ -40,8 +40,14 @@ export interface OrderStatusDtoResponse {
   id: number;
   status: OrderStatus;
   totalCost: number;
-  dateTime: string; // ISO дата: 2025-05-20T12:34:56
+  totalPrice: number;
+  profit: number;
+  loginClient: string;
+  address: string;
+  city: string;
+  localDateTime: string;
 }
+
 
 // Товары внутри заказа клиента
 export interface OrderItemClientDtoResponse {

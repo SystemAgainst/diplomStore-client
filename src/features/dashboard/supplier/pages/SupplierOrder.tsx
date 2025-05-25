@@ -73,7 +73,7 @@ export const SupplierOrder = () => {
         <div>
           <p className="font-semibold">Заказ #{order.id}</p>
           <p className="text-muted-foreground">
-            Дата: {new Date(order.dateTime).toLocaleString()}
+            Дата: {new Date(order.localDateTime).toLocaleString('ru-RU')}
           </p>
         </div>
         <p className="font-bold">Сумма: {order.totalCost} ₽</p>
