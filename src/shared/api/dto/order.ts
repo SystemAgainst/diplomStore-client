@@ -32,7 +32,7 @@ export const OrderStatusLabels: Record<OrderStatus | 'ALL', string> = {
   CANCELLED: 'Отменён',
 };
 
-export type TabFilter = OrderStatus | 'ALL' | 'PENDING_GROUP';
+export type TabFilter = OrderStatus | 'ALL';
 
 export interface OrderStatusDtoResponse {
   id: number;

@@ -15,7 +15,8 @@ import {
 import {
   OrderStatus,
   type OrderStatusDtoResponse,
-  OrderStatusLabels, type TabFilter,
+  OrderStatusLabels,
+  type TabFilter,
 } from '@/shared/api/dto/order';
 
 
@@ -23,7 +24,7 @@ export const SupplierOrder = () => {
   const menu = useRoleMenu();
   const [orders, setOrders] = useState<OrderStatusDtoResponse[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<TabFilter>('PENDING_GROUP');
+  const [activeTab, setActiveTab] = useState<TabFilter>('PENDING');
 
   const fetchOrders = async () => {
     try {
@@ -134,20 +135,19 @@ export const SupplierOrder = () => {
     </Card>
   );
 
-  const statuses: (OrderStatus | 'ALL')[] = [
-    'ALL',
-    'PENDING',
-    'CONFIRMED',
-    'SHIPPED',
-    'DELIVERED',
-    'PAID',
-    'CANCELLED',
-  ];
-
   const filteredOrders =
     activeTab === 'ALL'
       ? orders
       : orders.filter((o) => o.status === activeTab);
+
+  const tabs: { value: TabFilter; label: string }[] = [
+    { value: OrderStatus.PENDING, label: OrderStatusLabels.PENDING },
+    { value: OrderStatus.SHIPPED, label: OrderStatusLabels.SHIPPED },
+    { value: OrderStatus.DELIVERED, label: OrderStatusLabels.DELIVERED },
+    { value: OrderStatus.PAID, label: OrderStatusLabels.PAID },
+    { value: OrderStatus.CANCELLED, label: OrderStatusLabels.CANCELLED },
+    { value: 'ALL', label: OrderStatusLabels.ALL },
+  ];
 
   return (
     <DashboardLayout roleBasedMenuSlot={menu}>
@@ -157,9 +157,9 @@ export const SupplierOrder = () => {
       ) : (
         <Tabs defaultValue="ALL" value={activeTab} onValueChange={(v) => setActiveTab(v as OrderStatus | 'ALL')}>
           <TabsList className="overflow-x-auto max-w-full mb-4">
-            {statuses.map((status) => (
-              <TabsTrigger key={status} value={status}>
-                {OrderStatusLabels[status]}
+            {tabs.map((tab) => (
+              <TabsTrigger key={tab.value} value={tab.value}>
+                {tab.label}
               </TabsTrigger>
             ))}
           </TabsList>
