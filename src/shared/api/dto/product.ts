@@ -12,12 +12,12 @@ export interface MainDtoResponse {
 }
 
 export interface ProductInfo {
-  title: string;
-  quantity: number;
-  sellingPrice: number;
-  productSku: never | null;
-  totalPrice: number;
-  totalCost: number;
-  costPrice: number;
-  profit: number;
+  title?: string;
+  quantity?: number;
+  sellingPrice?: number;
+  productSku?: never | null;
+  totalPrice?: number;
+  totalCost?: number;
+  costPrice?: number;
+  profit?: number;
 }

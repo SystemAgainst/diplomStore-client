@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
 import { Card } from '@/shared/ui/card';
@@ -12,6 +13,8 @@ interface OrderCardProps {
 }
 
 export const OrderCard = ({ order, onPay, onCancel, showActions }: OrderCardProps) => {
+  const [showDetails, setShowDetails] = useState(false);
+
   return (
     <Card className="p-4 space-y-4">
       <div className="flex justify-between items-center">
@@ -23,36 +26,40 @@ export const OrderCard = ({ order, onPay, onCancel, showActions }: OrderCardProp
         </div>
         <div className="text-right">
           <Badge>{OrderStatusLabels[order.status]}</Badge>
-          <p className="text-lg font-bold">{order.totalCost} ₽</p>
+          <p className="text-lg font-bold">{order.totalCost.toLocaleString()} ₽</p>
         </div>
       </div>
 
-      {order.items?.length ? (
+      <div className="flex">
+        <Button
+          variant="outline"
+          onClick={() => setShowDetails((prev) => !prev)}
+        >
+          {showDetails ? 'Скрыть детали' : 'Детали заказа'}
+        </Button>
+      </div>
+
+      {showDetails && order.orderItemClientDtoResponse?.length > 0 && (
         <div className="space-y-2">
-          {order.items.map((item, idx) => (
+          {order.orderItemClientDtoResponse.map((item, idx) => (
             <div key={idx} className="flex justify-between items-center">
               <div className="flex items-center gap-3">
                 <img
-                  src={item.image || '/mock-product.jpg'}
-                  alt={item.title}
+                  src={'/mock-product.jpg'}
+                  alt={item.title || 'Товар'}
                   className="w-12 h-12 object-cover rounded"
-                  onError={(e) =>
-                    ((e.target as HTMLImageElement).src = '/mock-product.jpg')
-                  }
                 />
                 <div>
                   <p className="font-medium">{item.title}</p>
                   <p className="text-sm text-muted-foreground">
-                    {item.quantity} × {item.price} ₽
+                    {item.quantity} × {item.sellingPrice?.toLocaleString()} ₽
                   </p>
                 </div>
               </div>
-              <span className="font-bold">{item.total} ₽</span>
+              <span className="font-bold">{item.totalPrice.toLocaleString()} ₽</span>
             </div>
           ))}
         </div>
-      ) : (
-        <p className="text-sm text-muted-foreground">Нет данных о товарах</p>
       )}
 
       {showActions && (

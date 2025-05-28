@@ -21,11 +21,11 @@ export interface ClientLocation {
 
 export interface ClientOrderDto {
   id?: number;
-  title: string;
-  quantity: number;
-  price: number;
-  total: number;
-  image?: string;
+  title?: string;
+  quantity?: number;
+  sellingPrice?: number;
+  sku?: number | null;
+  totalPrice: number;
 }
 
 export interface OrderClientDtoResponse {
@@ -33,6 +33,6 @@ export interface OrderClientDtoResponse {
   status: OrderStatus;
   totalCost: number;
   dateTime: string;
-  items: ClientOrderDto[];
+  orderItemClientDtoResponse: ClientOrderDto[];
 }
 

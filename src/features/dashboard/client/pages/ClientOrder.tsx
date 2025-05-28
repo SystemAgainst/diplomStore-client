@@ -18,7 +18,7 @@ export const ClientOrder = () => {
   const menu = useRoleMenu();
   const [orders, setOrders] = useState<OrderClientDtoResponse[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<TabFilter>('PENDING_GROUP');
+  const [activeTab, setActiveTab] = useState<TabFilter>(OrderStatus.PENDING);
 
   const fetchOrders = async () => {
     try {
@@ -64,28 +64,20 @@ export const ClientOrder = () => {
     }
   };
 
-  const filterOrdersByTab = (tab: TabFilter) => {
-    if (tab === 'ALL') return orders;
-
-    const pendingGroupStatuses: OrderStatus[] = [
-      OrderStatus.PENDING,
-    ];
-
-    if (tab === 'PENDING_GROUP') {
-      return orders.filter((o) => pendingGroupStatuses.includes(o.status));
-    }
-
-    return orders.filter((o) => o.status === tab);
-  };
-
   const tabs: { value: TabFilter; label: string }[] = [
-    { value: 'PENDING_GROUP', label: 'В ожидании' },
+    { value: OrderStatus.PENDING, label: OrderStatusLabels.PENDING },
     { value: OrderStatus.SHIPPED, label: OrderStatusLabels.SHIPPED },
     { value: OrderStatus.DELIVERED, label: OrderStatusLabels.DELIVERED },
     { value: OrderStatus.PAID, label: OrderStatusLabels.PAID },
     { value: OrderStatus.CANCELLED, label: OrderStatusLabels.CANCELLED },
     { value: 'ALL', label: 'История заказов' },
   ];
+
+  const filterOrdersByTab = (tab: TabFilter) => {
+    if (tab === 'ALL') return orders;
+
+    return orders.filter((o) => o.status === tab);
+  };
 
   const filteredOrders = filterOrdersByTab(activeTab);
 
@@ -100,7 +92,7 @@ export const ClientOrder = () => {
         </Card>
       ) : (
         <Tabs
-          defaultValue="PENDING_GROUP"
+          defaultValue={OrderStatus.PENDING}
           value={activeTab}
           onValueChange={(value: string) => setActiveTab(value as TabFilter)}
         >
