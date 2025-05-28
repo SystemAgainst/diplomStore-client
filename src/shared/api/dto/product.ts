@@ -10,3 +10,14 @@ export interface MainDtoResponse {
   imageUrl?: string;
   supplier: SupplierDto
 }
+
+export interface ProductInfo {
+  title: string;
+  quantity: number;
+  sellingPrice: number;
+  productSku: never | null;
+  totalPrice: number;
+  totalCost: number;
+  costPrice: number;
+  profit: number;
+}

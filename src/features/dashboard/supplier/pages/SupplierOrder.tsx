@@ -18,6 +18,7 @@ import {
   OrderStatusLabels,
   type TabFilter,
 } from '@/shared/api/dto/order';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/shared/ui/accordion.tsx';
 
 
 export const SupplierOrder = () => {
@@ -108,6 +109,31 @@ export const SupplierOrder = () => {
             {order.profit.toLocaleString('ru-RU')} ₽
           </p>
         </div>
+      </div>
+
+      <Separator />
+
+      <div className="space-y-2">
+        <p className="font-semibold text-muted-foreground">Содержимое заказа:</p>
+        <Accordion type="multiple" className="w-full">
+          {order.responseList.map((item, idx) => (
+            <AccordionItem key={idx} value={`item-${idx}`}>
+              <AccordionTrigger>{item.title} ({item.quantity} шт.)</AccordionTrigger>
+              <AccordionContent>
+                <div className="space-y-1 text-sm">
+                  <p><strong>Артикул:</strong> {item.productSku || '—'}</p>
+                  <p><strong>Цена продажи:</strong> {item.sellingPrice.toLocaleString('ru-RU')} ₽</p>
+                  <p><strong>Себестоимость единицы:</strong> {item.costPrice.toLocaleString('ru-RU')} ₽</p>
+                  <p><strong>Сумма продаж:</strong> {item.totalPrice.toLocaleString('ru-RU')} ₽</p>
+                  <p><strong>Себестоимость всего:</strong> {item.totalCost.toLocaleString('ru-RU')} ₽</p>
+                  <p className={item.profit >= 0 ? 'text-green-600 font-bold' : 'text-red-600 font-bold'}>
+                    {item.profit >= 0 ? 'Прибыль:' : 'Убыток:'} {item.profit.toLocaleString('ru-RU')} ₽
+                  </p>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
       </div>
 
       <Separator />

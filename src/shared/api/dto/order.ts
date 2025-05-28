@@ -1,4 +1,6 @@
 // При оформлении заказа
+import type { ProductInfo } from '@/shared/api/dto/product.ts';
+
 export interface CreateOrderDtoRequest {
   address: string;
   city: string;
@@ -44,6 +46,7 @@ export interface OrderStatusDtoResponse {
   address: string;
   city: string;
   localDateTime: string;
+  responseList: ProductInfo[]
 }
 
 
