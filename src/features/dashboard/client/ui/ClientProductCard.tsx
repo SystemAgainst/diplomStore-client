@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { getProductById } from '@/shared/api/product.ts';
 import { useCartStore } from '@/features/cart/useCartStore';
 import { cartAdd } from '@/shared/api/cart.ts';
-import { API_URL, getFullImageUrl } from '@/shared/const';
+import { getFullImageUrl } from '@/shared/const';
 import { useNavigate } from 'react-router-dom';
 
 interface ClientProductCardProps {
@@ -53,10 +53,6 @@ export const ClientProductCard = ({ product }: ClientProductCardProps) => {
     }
   };
 
-  const fullImageUrl = details?.imageUrl?.startsWith('http')
-    ? details.imageUrl
-    : `${API_URL}${details?.imageUrl || ''}`;
-
   const handleDetailSupplierClick = (login: string) => {
     navigate(`/SOLE_TRADER/supplier-info/${login}`);
   };
@@ -85,7 +81,7 @@ export const ClientProductCard = ({ product }: ClientProductCardProps) => {
         {details ? (
           <div className="space-y-4">
             <img
-              src={fullImageUrl || '/mock-product.jpg'}
+              src={getFullImageUrl(details?.imageUrl) || '/mock-product.jpg'}
               alt={details.title}
               className="w-full h-64 object-cover rounded"
               onError={(e) => ((e.target as HTMLImageElement).src = '/mock-product.jpg')}
