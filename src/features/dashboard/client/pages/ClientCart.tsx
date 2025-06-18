@@ -10,6 +10,7 @@ import { Trash2, Minus, Plus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { getClientCart } from '@/shared/api/cart';
 import { toast } from 'sonner';
+import { getFullImageUrl } from '@/shared/const';
 
 export const ClientCart = () => {
   const menu = useRoleMenu();
@@ -71,7 +72,7 @@ export const ClientCart = () => {
             <Card key={item.id} className="p-4 flex items-center justify-between gap-4">
               <div className="flex items-center gap-4">
                 <img
-                  src={item.image || '/mock-product.jpg'}
+                  src={getFullImageUrl(item.imageUrl)}
                   alt={item.title}
                   className="w-16 h-16 object-cover rounded"
                   onError={(e) =>
@@ -83,7 +84,6 @@ export const ClientCart = () => {
                   <p className="text-muted-foreground">{item.total} ₽</p>
                 </div>
               </div>
-
               <div className="flex items-center gap-2">
                 <Button variant="ghost" size="icon" onClick={() => decrease(item.id)}>
                   <Minus className="w-4 h-4" />

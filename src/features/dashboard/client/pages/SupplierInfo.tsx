@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { API_URL } from '@/shared/const';
+import { API_URL, getFullImageUrl } from '@/shared/const';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card.tsx';
 import { Button } from '@/shared/ui/button.tsx';
 import { getAllInfoAboutSupplier } from '@/shared/api/client.ts';
@@ -98,7 +98,7 @@ export default function SupplierInfo() {
                   {supplier.productDtoResponse.map(product => (
                     <div key={product.id} className="border rounded p-2 space-y-2">
                       <img
-                        src={product.imageUrl.startsWith('http') ? product.imageUrl : `${API_URL}${product.imageUrl}`}
+                        src={getFullImageUrl(product.imageUrl) || `${API_URL}${product.imageUrl}`}
                         alt={product.title}
                         className="w-full h-40 object-cover rounded"
                         onError={(e) => ((e.target as HTMLImageElement).src = '/mock-product.jpg')}

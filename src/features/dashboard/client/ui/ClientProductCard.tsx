@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { getProductById } from '@/shared/api/product.ts';
 import { useCartStore } from '@/features/cart/useCartStore';
 import { cartAdd } from '@/shared/api/cart.ts';
-import { API_URL } from '@/shared/const';
+import { API_URL, getFullImageUrl } from '@/shared/const';
 import { useNavigate } from 'react-router-dom';
 
 interface ClientProductCardProps {
@@ -65,7 +65,7 @@ export const ClientProductCard = ({ product }: ClientProductCardProps) => {
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <Card className="p-4 flex flex-col gap-4">
         <img
-          src={product.imageUrl}
+          src={getFullImageUrl(product.imageUrl)}
           alt={product.title}
           className="h-48 w-full object-cover rounded"
           onError={(e) => ((e.target as HTMLImageElement).src = '/mock-product.jpg')}

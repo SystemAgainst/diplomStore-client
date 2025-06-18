@@ -7,10 +7,16 @@ export const ROLES = {
 export type Role = (typeof ROLES)[keyof typeof ROLES];
 
 export const API_URL = import.meta.env.VITE_API_URL;
+export const STATIC_URL = import.meta.env.VITE_STATIC_URL;
 
 export const getFullImageUrl = (path: string | undefined) => {
   if (!path) return '/mock-product.jpg';
-  return path.startsWith('http')
+
+  const fullPath = path.startsWith('http')
     ? path
-    : `${import.meta.env.VITE_API_URL}${path}`;
+    : `${STATIC_URL}${path}`;
+
+  return encodeURI(fullPath);
 };
+
+

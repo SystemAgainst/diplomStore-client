@@ -45,7 +45,7 @@ const columnsConfig = (
   },
   {
     accessorKey: 'sellingPrice',
-    header: 'Себестоимость ₽',
+    header: 'Цена продажи ₽',
     cell: ({ row }) =>
       editRowId === row.original.id ? (
         <Input
@@ -59,7 +59,7 @@ const columnsConfig = (
   },
   {
     accessorKey: 'price',
-    header: 'Цена продажи ₽',
+    header: 'Себестоимость ₽',
     cell: ({ row }) =>
       editRowId === row.original.id ? (
         <Input
