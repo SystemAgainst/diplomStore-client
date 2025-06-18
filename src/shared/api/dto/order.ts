@@ -27,7 +27,7 @@ export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus];
 export const OrderStatusLabels: Record<OrderStatus | 'ALL', string> = {
   ALL: 'История заказов',
   PENDING: 'В ожидании',
-  CONFIRMED: 'Подтверждён',
+  CONFIRMED: 'Принятые',
   SHIPPED: 'В пути',
   DELIVERED: 'Доставлен',
   PAID: 'Оплачен',

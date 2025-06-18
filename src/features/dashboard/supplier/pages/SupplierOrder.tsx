@@ -168,6 +168,7 @@ export const SupplierOrder = () => {
 
   const tabs: { value: TabFilter; label: string }[] = [
     { value: OrderStatus.PENDING, label: OrderStatusLabels.PENDING },
+    { value: OrderStatus.CONFIRMED, label: OrderStatusLabels.CONFIRMED },
     { value: OrderStatus.SHIPPED, label: OrderStatusLabels.SHIPPED },
     { value: OrderStatus.DELIVERED, label: OrderStatusLabels.DELIVERED },
     { value: OrderStatus.PAID, label: OrderStatusLabels.PAID },
